@@ -31,10 +31,10 @@ const jobs = [
 
 const Jobs = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
 
       {/* HERO */}
-      <section className="text-center py-16 px-4 fade-up">
+      <section className="text-center py-8 px-4 fade-up">
         <h1 className="text-4xl sm:text-5xl font-bold">
           Find Your Dream Job
         </h1>
@@ -61,7 +61,7 @@ const Jobs = () => {
       </section>
 
       {/* JOBS */}
-      <section className="max-w-6xl mx-auto px-4 py-10 grid gap-6">
+      <section className="max-w-6xl mx-auto px-4 py-4 grid gap-6">
         {jobs.map((job) => (
           <div
             key={job.id}

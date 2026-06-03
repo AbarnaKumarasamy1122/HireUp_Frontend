@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { supabase } from "../../api/supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../api/supabaseClient";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -8,24 +8,27 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
+   const handleLogin = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (!error) {
-      navigate("/");
-    } else {
-      alert(error.message);
-    }
+    if (error) return alert(error.message);
+
+    const role = data.user?.user_metadata?.role;
+
+    if (role === "candidate") navigate("/candidate/dashboard");
+    else if (role === "employer") navigate("/employer/dashboard");
+    else navigate("/admin/dashboard");
   };
+
 
   return (
     <div className="bg-background">
 
       {/* MAIN CONTAINER */}
-      <div className="flex items-center justify-center px-4 py-10">
+      <div className="flex items-center justify-center px-4 py-4">
 
         {/* CARD */}
         <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 overflow-hidden rounded-3xl shadow-xl border border-border fade-up">
@@ -98,7 +101,7 @@ const Login = () => {
               {/* LOGIN BUTTON */}
               <button
                 onClick={handleLogin}
-                className="btn-primary w-full py-3 text-lg"
+                className="btn-primary w-full py-3 text-lg cursor-pointer"
               >
                 Login
               </button>

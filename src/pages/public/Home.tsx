@@ -70,10 +70,10 @@ const Home = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
 
       {/* HERO */}
-      <section className="px-4 py-16 sm:py-24 text-center max-w-5xl mx-auto fade-up">
+      <section className="px-4 py-8 sm:py-24 text-center max-w-5xl mx-auto fade-up">
         
         <div className="inline-flex items-center gap-2 rounded-full border border-border px-3 py-2 text-sm">
           <Sparkles size={20} className="text-primary" />
@@ -93,7 +93,7 @@ const Home = () => {
         <div className="mt-8 flex flex-col sm:flex-row gap-3 border border-border p-3 rounded-xl bg-background shadow-sm hover:shadow-md transition">
 
           <div className="flex items-center gap-2 flex-1">
-            <Search size={24} className="text-primary" />
+            <Search size={20} className="text-primary" />
 
             <input
               className="w-full bg-transparent"
@@ -217,14 +217,14 @@ const Home = () => {
 
           <button
             onClick={() => navigate("/signup")}
-            className="bg-white text-black px-6 py-2 rounded-lg hover:scale-105 transition"
+            className="bg-white text-black px-6 py-2 rounded-lg cursor-pointer hover:scale-105 transition"
           >
             Create Account
           </button>
 
           <button
             onClick={() => navigate("/jobs")}
-            className="border border-white px-6 py-2 rounded-lg hover:bg-white hover:text-black transition"
+            className="border border-white px-6 py-2 rounded-lg cursor-pointer hover:bg-white hover:text-black transition"
           >
             Explore Jobs
           </button>

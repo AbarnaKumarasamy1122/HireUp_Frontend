@@ -38,9 +38,9 @@ const values = [
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
       {/* HERO */}
-      <section className="text-center py-20 px-4 max-w-5xl mx-auto fade-up">
+      <section className="text-center py-8 px-4 max-w-5xl mx-auto fade-up">
         <h1 className="text-4xl sm:text-5xl font-bold">
           About <span className="text-primary">HireUp</span>
         </h1>
@@ -53,7 +53,7 @@ const About = () => {
       </section>
 
       {/* STATS */}
-      <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto px-4 py-10">
+      <section className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto px-4 py-4">
         {stats.map((item) => (
           <div key={item.label} className="card p-6 text-center fade-up">
             <div className="text-3xl font-bold text-primary">

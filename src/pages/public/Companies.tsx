@@ -24,10 +24,10 @@ const companies = [
 
 const Companies = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
 
       {/* HERO */}
-      <section className="text-center py-16 px-4 fade-up">
+      <section className="text-center py-8 px-4 fade-up">
         <h1 className="text-4xl sm:text-5xl font-bold">
           Top Companies
         </h1>
@@ -38,7 +38,7 @@ const Companies = () => {
       </section>
 
       {/* COMPANIES */}
-      <section className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-3 gap-6">
+      <section className="max-w-6xl mx-auto px-4 py-4 grid md:grid-cols-3 gap-6">
 
         {companies.map((company) => (
           <div

@@ -6,10 +6,9 @@ import {
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background">
 
-      {/* HERO */}
-      <section className="text-center py-16 px-4 fade-up">
+      <section className="text-center py-8 px-4 fade-up">
         <h1 className="text-4xl sm:text-5xl font-bold">
           Let's Talk
         </h1>
@@ -19,8 +18,7 @@ const Contact = () => {
         </p>
       </section>
 
-      {/* CONTENT */}
-      <section className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10">
+      <section className="max-w-6xl mx-auto px-4 py-4 grid md:grid-cols-2 gap-10">
 
         {/* LEFT */}
         <div className="space-y-6 fade-up">

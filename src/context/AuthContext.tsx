@@ -1,30 +1,54 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../api/supabaseClient";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
 const AuthContext = createContext<any>(null);
 
-export const AuthProvider = ({ children }: any) => {
+export const AuthProvider = ({
+  children,
+}: any) => {
+
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUser(data.user);
-    });
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_, session) => {
-        setUser(session?.user || null);
-      }
-    );
+    const storedUser =
+      sessionStorage.getItem("user");
 
-    return () => listener.subscription.unsubscribe();
+    if (storedUser) {
+
+      setUser(JSON.parse(storedUser));
+    }
+
   }, []);
 
+  const logout = () => {
+
+    sessionStorage.removeItem("token");
+
+    sessionStorage.removeItem("user");
+
+    setUser(null);
+  };
+
   return (
-    <AuthContext.Provider value={{ user }}>
+
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        logout,
+      }}
+    >
+
       {children}
+
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () =>
+  useContext(AuthContext);

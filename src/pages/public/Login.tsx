@@ -1,28 +1,33 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../api/supabaseClient";
+import { loginUser } from "../../services/authService";
 
 const Login = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
 
   const navigate = useNavigate();
 
-   const handleLogin = async () => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const handleLogin = async () => {
 
-    if (error) return alert(error.message);
+    const res = await loginUser(email, password);
 
-    const role = data.user?.user_metadata?.role;
+    const { token, user } = res.data;
 
-    if (role === "candidate") navigate("/candidate/dashboard");
-    else if (role === "employer") navigate("/employer/dashboard");
+    if (remember) {
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("user", JSON.stringify(user));
+    }
+
+    if (user.role === "candidate") navigate("/candidate/dashboard");
+    else if (user.role === "employer") navigate("/employer/dashboard");
     else navigate("/admin/dashboard");
   };
-
 
   return (
     <div className="bg-background">
@@ -98,6 +103,26 @@ const Login = () => {
                 />
               </div>
 
+              <div className="flex items-center justify-between">
+                {/* REMEMBER ME */}
+                <div className="flex items-center gap-2 mb-3">
+                  <input
+                    type="checkbox"
+                    onChange={(e) => setRemember(e.target.checked)}
+                    className="w-4 h-4 text-primary border-border rounded focus:ring-primary cursor-pointer"
+                  />
+                  <span>Remember Me</span>
+                </div>
+
+                {/* FORGOT PASSWORD */}
+                <p
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-sm text-primary mb-3 cursor-pointer"
+                >
+                  Forgot Password?
+                </p>
+              </div>
+
               {/* LOGIN BUTTON */}
               <button
                 onClick={handleLogin}
@@ -105,6 +130,8 @@ const Login = () => {
               >
                 Login
               </button>
+
+
 
               {/* FOOTER */}
               <p className="text-center text-sm text-muted mt-6">

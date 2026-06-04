@@ -15,6 +15,9 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import CandidateDashboard from "../pages/candidate/CandidateDashboard";
 import EmployerDashboard from "../pages/employer/EmployerDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminLayout from "../pages/admin/AdminLayout";
+import ApproveCompanies from "../pages/admin/ApproveCompanies";
+import Settings from "../pages/admin/Settings";
 
 const AppRoutes = () => {
   return (
@@ -30,7 +33,7 @@ const AppRoutes = () => {
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/signup" element={<Signup />} />
-        
+
         {/* CANDIDATE */}
         <Route
           path="/candidate/dashboard"
@@ -53,13 +56,18 @@ const AppRoutes = () => {
 
         {/* ADMIN */}
         <Route
-          path="/admin/dashboard"
+          path="/admin"
           element={
             <ProtectedRoute role="admin">
-              <AdminDashboard />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="approve-companies" element={<ApproveCompanies />} />
+          <Route path="companies" element={<Companies />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
 
       </Route>
     </Routes>

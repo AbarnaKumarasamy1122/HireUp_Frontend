@@ -1,11 +1,11 @@
-const EmployerDashboard = () => {
+const CompanyDashboard = () => {
   return (
     <div>
         <h1 className="text-3xl font-bold mb-6">
-            Employer Dashboard
+            Company Dashboard
         </h1>
     </div>
   );
 };
 
-export default EmployerDashboard;
+export default CompanyDashboard;

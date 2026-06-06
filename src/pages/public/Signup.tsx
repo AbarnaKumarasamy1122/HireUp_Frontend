@@ -1,48 +1,117 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
+import { imagekit } from "../../utils/imagekit";
+import axios from "axios";
 
 const Signup = () => {
 
   const navigate = useNavigate();
 
-  const [tab, setTab] = useState<"candidate" | "employer">(
-    "candidate"
-  );
+  const [tab, setTab] = useState<"candidate" | "company">("candidate");
+
+  const [document, setDocument] = useState<any>(null);
 
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
+
     companyName: "",
+    companyAddress: "",
+    companyContact: "",
+    companyWebsite: "",
+    companyDescription: "",
+    verifiedDocument: "",
+
     email: "",
     password: "",
   });
+
+  const uploadDocument = async () => {
+
+    if (!document) return "";
+
+    const authRes = await axios.get(
+      "http://127.0.0.1:8000/api/imagekit-auth/"
+    );
+
+    const response =
+      await imagekit.upload({
+
+        file: document,
+
+        fileName: document.name,
+
+        token: authRes.data.token,
+
+        signature:
+          authRes.data.signature,
+
+        expire:
+          authRes.data.expire,
+      });
+
+    return response.url;
+  };
 
   const handleSignup = async () => {
 
     try {
 
-      await registerUser({
-        email: form.email,
-        password: form.password,
+      let documentUrl = "";
 
-        first_name: form.firstName,
-        last_name: form.lastName,
+      if (
+        tab === "company" &&
+        document
+      ) {
+
+        documentUrl =
+          await uploadDocument();
+      }
+
+      await registerUser({
 
         role: tab,
 
-        company_name:
-          tab === "employer"
-            ? form.companyName
-            : "",
-      });
+        email: form.email,
 
-      alert("Account created successfully");
+        password: form.password,
+
+        first_name: form.firstName,
+
+        last_name: form.lastName,
+
+        company_name:
+          form.companyName,
+
+        company_address:
+          form.companyAddress,
+
+        company_contact:
+          form.companyContact,
+
+        company_website:
+          form.companyWebsite,
+
+        company_description:
+          form.companyDescription,
+
+        verified_document:
+          documentUrl,
+      });
+      alert(
+        tab === "company"
+          ? "Registration submitted for admin approval"
+          : "Account created successfully"
+      );
 
       navigate("/login");
 
     } catch (err: any) {
-      alert(err.response?.data?.error || "Signup failed");
+
+      alert(
+        err.response?.data?.error
+      );
     }
   };
 
@@ -67,7 +136,7 @@ const Signup = () => {
               <div className="mt-8">
                 <button
                   onClick={() => navigate("/login")}
-                  className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-105 transition"
+                  className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-105 transition cursor-pointer"
                 >
                   Login Account
                 </button>
@@ -88,29 +157,27 @@ const Signup = () => {
               {/* TABS */}
               <div className="flex mb-6 border border-border rounded-xl overflow-hidden">
                 <button
-                  className={`flex-1 py-3 font-medium transition ${
-                    tab === "candidate"
-                      ? "bg-primary text-white"
-                      : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
-                  }`}
+                  className={`flex-1 py-3 font-medium transition cursor-pointer ${tab === "candidate"
+                    ? "bg-primary text-white"
+                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
+                    }`}
                   onClick={() => setTab("candidate")}
                 >
                   Candidate
                 </button>
 
                 <button
-                  className={`flex-1 py-3 font-medium transition ${
-                    tab === "employer"
-                      ? "bg-primary text-white"
-                      : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
-                  }`}
-                  onClick={() => setTab("employer")}
+                  className={`flex-1 py-3 font-medium transition cursor-pointer ${tab === "company"
+                    ? "bg-primary text-white"
+                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
+                    }`}
+                  onClick={() => setTab("company")}
                 >
-                  Employer
+                  Company
                 </button>
               </div>
 
-              {/* FORM */}
+              {/* CANDIDATE */}
               {tab === "candidate" ? (
                 <div className="space-y-4">
 
@@ -165,21 +232,60 @@ const Signup = () => {
 
                   <input
                     type="text"
-                    placeholder="First Name"
+                    placeholder="Company Address"
                     className="w-full border border-border rounded-xl px-4 py-3"
                     onChange={(e) =>
-                      setForm({ ...form, firstName: e.target.value })
+                      setForm({ ...form, companyAddress: e.target.value })
                     }
                   />
 
                   <input
                     type="text"
-                    placeholder="Last Name"
+                    placeholder="Company Contact Number"
                     className="w-full border border-border rounded-xl px-4 py-3"
                     onChange={(e) =>
-                      setForm({ ...form, lastName: e.target.value })
+                      setForm({
+                        ...form,
+                        companyContact: e.target.value
+                      })
                     }
                   />
+
+                  <input
+                    type="text"
+                    placeholder="Company Website"
+                    className="w-full border border-border rounded-xl px-4 py-3"
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        companyWebsite: e.target.value
+                      })
+                    }
+                  />
+
+                  <textarea
+                    placeholder="Company Description"
+                    className="w-full border border-border rounded-xl px-4 py-3"
+                    onChange={(e) =>
+                      setForm({
+                        ...form,
+                        companyDescription: e.target.value
+                      })
+                    }
+                  />
+                  
+                  <label className="block text-sm font-medium text-gray-700">
+                    Upload Verification Document
+                  </label>
+
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,image/*"
+                    onChange={(e: any) =>
+                      setDocument(e.target.files[0])
+                    }
+                  />
+
 
                   <input
                     type="email"
@@ -205,7 +311,7 @@ const Signup = () => {
               {/* BUTTON */}
               <button
                 onClick={handleSignup}
-                className="btn-primary w-full py-3 text-lg mt-6"
+                className="btn-primary w-full py-3 text-lg mt-6 cursor-pointer"
               >
                 Create Account
               </button>

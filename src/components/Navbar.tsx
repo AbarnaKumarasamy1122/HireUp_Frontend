@@ -50,7 +50,7 @@ const Navbar = () => {
 
         {/* ================= HAMBURGER (MD + SM) ================= */}
         <button
-          className="lg:hidden text-3xl"
+          className="lg:hidden text-3xl cursor-pointer"
           onClick={() => setOpen(!open)}
         >
           ☰

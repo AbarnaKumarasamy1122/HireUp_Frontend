@@ -13,7 +13,7 @@ const AdminDashboard = () => {
       icon: <Users size={28} />,
     },
     {
-      title: "Employers",
+      title: "Companies",
       count: 320,
       icon: <Building2 size={28} />,
     },
@@ -27,9 +27,9 @@ const AdminDashboard = () => {
   return (
     <div className="fade-up">
 
-      {/* <h1 className="text-3xl font-bold mb-8">
+      <h1 className="text-3xl font-bold mb-8">
         Admin Dashboard
-      </h1> */}
+      </h1>
 
       {/* STATS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

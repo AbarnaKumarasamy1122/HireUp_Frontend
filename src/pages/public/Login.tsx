@@ -25,7 +25,7 @@ const Login = () => {
     }
 
     if (user.role === "candidate") navigate("/candidate/dashboard");
-    else if (user.role === "employer") navigate("/employer/dashboard");
+    else if (user.role === "company") navigate("/company/dashboard");
     else navigate("/admin/dashboard");
   };
 
@@ -53,7 +53,7 @@ const Login = () => {
               <div className="mt-8">
                 <button
                   onClick={() => navigate("/signup")}
-                  className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-105 transition"
+                  className="bg-white text-black px-6 py-3 rounded-xl font-medium hover:scale-105 transition cursor-pointer"
                 >
                   Create Account
                 </button>

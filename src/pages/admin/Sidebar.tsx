@@ -36,7 +36,7 @@ const Sidebar = () => {
         <div className="w-65 min-h-screen border-r border-border bg-background p-5">
 
             {/* LOGO */}
-            <div className="mb-10 flex flex-row items-center">
+            <div className="mb-4 flex flex-row items-center">
                 <img src={logo} alt="logo" className="w-20 mb-2" />
                 <div>
                     <h1 className="text-3xl font-bold text-primary">

@@ -13,10 +13,11 @@ import Signup from "../pages/public/Signup";
 import MainLayout from "../layouts/MainLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
 import CandidateDashboard from "../pages/candidate/CandidateDashboard";
-import EmployerDashboard from "../pages/employer/EmployerDashboard";
+import CompanyDashboard from "../pages/company/CompanyDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminLayout from "../pages/admin/AdminLayout";
 import ApproveCompanies from "../pages/admin/ApproveCompanies";
+import ViewCompanies from "../pages/admin/ViewCompanies";
 import Settings from "../pages/admin/Settings";
 
 const AppRoutes = () => {
@@ -44,12 +45,12 @@ const AppRoutes = () => {
           }
         />
 
-        {/* EMPLOYER */}
+        {/* COMPANY */}
         <Route
-          path="/employer/dashboard"
+          path="/company/dashboard"
           element={
-            <ProtectedRoute role="employer">
-              <EmployerDashboard />
+            <ProtectedRoute role="company">
+              <CompanyDashboard />
             </ProtectedRoute>
           }
         />
@@ -65,7 +66,7 @@ const AppRoutes = () => {
         >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="approve-companies" element={<ApproveCompanies />} />
-          <Route path="companies" element={<Companies />} />
+          <Route path="companies" element={<ViewCompanies />} />
           <Route path="settings" element={<Settings />} />
         </Route>
 

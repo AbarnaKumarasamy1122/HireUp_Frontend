@@ -1,111 +1,237 @@
+import { useEffect, useMemo, useState } from "react";
+
 import {
   MapPin,
   Briefcase,
   Clock3,
   Search,
+  Wallet,
+  CalendarDays,
+  Building2,
 } from "lucide-react";
 
-const jobs = [
-  {
-    id: 1,
-    title: "Frontend Developer",
-    company: "Google",
-    location: "Remote",
-    type: "Full Time",
-  },
-  {
-    id: 2,
-    title: "Backend Engineer",
-    company: "Microsoft",
-    location: "New York",
-    type: "Hybrid",
-  },
-  {
-    id: 3,
-    title: "UI/UX Designer",
-    company: "Adobe",
-    location: "Remote",
-    type: "Part Time",
-  },
-];
+import { getAllJobs } from "../../services/authService";
 
 const Jobs = () => {
+
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+
+  const loadJobs = async () => {
+
+    try {
+
+      const res = await getAllJobs();
+
+      setJobs(res.data);
+
+    } catch (err) {
+
+      console.log(err);
+
+    } finally {
+
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+
+    loadJobs();
+
+  }, []);
+
+  // FILTER JOBS
+  const filteredJobs = useMemo(() => {
+
+    return jobs.filter((job) => {
+
+      const keyword = search.toLowerCase();
+
+      return (
+        job.title?.toLowerCase().includes(keyword) ||
+        job.company_name?.toLowerCase().includes(keyword) ||
+        job.location?.toLowerCase().includes(keyword)
+      );
+    });
+
+  }, [jobs, search]);
+
+  // DATE FORMAT
+  const formatDate = (date: string) => {
+
+    return new Date(date).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
   return (
-    <div className="bg-background">
+
+    <div className="bg-background min-h-screen">
 
       {/* HERO */}
-      <section className="text-center py-8 px-4 fade-up">
+      <section className="text-center py-10 px-4 fade-up">
+
         <h1 className="text-4xl sm:text-5xl font-bold">
           Find Your Dream Job
         </h1>
 
         <p className="text-muted mt-4">
-          Discover thousands of opportunities worldwide.
+          Discover opportunities from top companies.
         </p>
 
         {/* SEARCH */}
-        <div className="max-w-4xl mx-auto mt-8 flex flex-col md:flex-row gap-3 border border-border p-3 rounded-xl shadow-sm">
+        <div className="max-w-4xl mx-auto mt-8">
 
-          <div className="flex items-center gap-2 flex-1">
-            <Search className="text-primary" />
+          <div className="flex items-center gap-3 border border-border rounded-2xl px-4 py-4 bg-background shadow-sm">
+
+            <Search className="text-primary" size={22} />
+
             <input
-              placeholder="Search jobs..."
-              className="w-full"
+              value={search}
+              onChange={(e) =>
+                setSearch(e.target.value)
+              }
+              placeholder="Search jobs, companies, locations..."
+              className="w-full bg-transparent outline-none"
             />
+
           </div>
 
-          <button className="btn-primary">
-            Search
-          </button>
         </div>
+
       </section>
 
       {/* JOBS */}
-      <section className="max-w-6xl mx-auto px-4 py-4 grid gap-6">
-        {jobs.map((job) => (
-          <div
-            key={job.id}
-            className="card p-6 hover:shadow-lg transition fade-up"
-          >
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <section className="max-w-6xl mx-auto px-4 pb-10">
 
-              <div>
-                <h2 className="text-2xl font-bold">
-                  {job.title}
-                </h2>
+        {loading ? (
 
-                <p className="text-primary font-medium">
-                  {job.company}
-                </p>
+          <div className="text-center text-muted py-10">
+            Loading jobs...
+          </div>
 
-                <div className="flex lg:flex-row md:flex-row flex-col gap-4 mt-3 text-sm text-muted">
+        ) : filteredJobs.length === 0 ? (
 
-                  <div className="flex items-center gap-1">
-                    <MapPin size={16} />
-                    {job.location}
+          <div className="card p-10 text-center">
+
+            <h2 className="text-2xl font-bold">
+              No Jobs Found
+            </h2>
+
+            <p className="text-muted mt-2">
+              Try searching with another keyword.
+            </p>
+
+          </div>
+
+        ) : (
+
+          <div className="grid gap-6">
+
+            {filteredJobs.map((job) => (
+
+              <div
+                key={job.id}
+                className="card p-6 hover:shadow-xl transition duration-300 fade-up"
+              >
+
+                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+
+                  {/* LEFT */}
+                  <div className="flex-1">
+
+                    {/* TITLE */}
+                    <h2 className="text-2xl font-bold">
+                      {job.title}
+                    </h2>
+
+                    {/* COMPANY */}
+                    <div className="flex items-center gap-2 mt-2 text-primary font-medium">
+
+                      <Building2 size={18} />
+
+                      <span>
+                        {job.company_name}
+                      </span>
+
+                    </div>
+
+                    {/* DESCRIPTION */}
+                    <p className="text-muted mt-4 line-clamp-3">
+                      {job.description}
+                    </p>
+
+                    {/* INFO */}
+                    <div className="flex flex-wrap gap-5 mt-5 text-sm text-muted">
+
+                      <div className="flex items-center gap-2">
+
+                        <MapPin size={16} />
+
+                        {job.location || "Remote"}
+
+                      </div>
+
+                      <div className="flex items-center gap-2 capitalize">
+
+                        <Briefcase size={16} />
+
+                        {job.location_type}
+
+                      </div>
+
+                      <div className="flex items-center gap-2">
+
+                        <Wallet size={16} />
+
+                        {job.salary || "Negotiable"}
+
+                      </div>
+
+                      <div className="flex items-center gap-2">
+
+                        <CalendarDays size={16} />
+
+                        Deadline: {formatDate(job.deadline)}
+
+                      </div>
+
+                    </div>
+
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <Briefcase size={16} />
-                    {job.type}
-                  </div>
+                  {/* RIGHT */}
+                  <div className="flex flex-col gap-3 lg:min-w-45">
 
-                  <div className="flex items-center gap-1">
-                    <Clock3 size={16} />
-                    Posted 2 days ago
+                    <button className="btn-primary w-full py-3 cursor-pointer">
+                      Apply Now
+                    </button>
+
+                    <div className="flex items-center justify-center gap-2 text-sm text-muted">
+
+                      <Clock3 size={15} />
+
+                      Recently Posted
+
+                    </div>
+
                   </div>
 
                 </div>
+
               </div>
+            ))}
 
-              <button className="btn-primary">
-                Apply Now
-              </button>
-
-            </div>
           </div>
-        ))}
+        )}
+
       </section>
+
     </div>
   );
 };

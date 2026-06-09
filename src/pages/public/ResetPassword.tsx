@@ -60,7 +60,7 @@ const ResetPassword = () => {
 
         <button
           onClick={handleReset}
-          className="btn-primary w-full mt-5 py-3"
+          className="btn-primary w-full mt-5 py-3 cursor-pointer"
         >
           Update Password
         </button>

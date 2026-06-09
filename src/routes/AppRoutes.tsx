@@ -19,6 +19,11 @@ import AdminLayout from "../pages/admin/AdminLayout";
 import ApproveCompanies from "../pages/admin/ApproveCompanies";
 import ViewCompanies from "../pages/admin/ViewCompanies";
 import Settings from "../pages/admin/Settings";
+import CompanyLayout from "../pages/company/CompanyLayout";
+import Analytics from "../pages/company/Analytics";
+import ManageJobs from "../pages/company/ManageJobs";
+import PostJob from "../pages/company/PostJob";
+import Applicants from "../pages/company/Applicants";
 
 const AppRoutes = () => {
   return (
@@ -37,7 +42,7 @@ const AppRoutes = () => {
 
         {/* CANDIDATE */}
         <Route
-          path="/candidate/dashboard"
+          path="/candidate/:id/dashboard"
           element={
             <ProtectedRoute role="candidate">
               <CandidateDashboard />
@@ -47,13 +52,20 @@ const AppRoutes = () => {
 
         {/* COMPANY */}
         <Route
-          path="/company/dashboard"
+          path="/company/:id"
           element={
             <ProtectedRoute role="company">
-              <CompanyDashboard />
+              <CompanyLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="dashboard" element={<CompanyDashboard />} />
+          <Route path="post-job" element={<PostJob />} />
+          <Route path="manage-jobs" element={<ManageJobs />} />
+          <Route path="applications" element={<Applicants />} />
+          <Route path="analytics" element={<Analytics />} />
+        </Route>
+
 
         {/* ADMIN */}
         <Route

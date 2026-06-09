@@ -1,8 +1,8 @@
 import {
   createContext,
   useContext,
-  useState,
   useEffect,
+  useState,
 } from "react";
 
 const AuthContext = createContext<any>(null);
@@ -11,7 +11,8 @@ export const AuthProvider = ({
   children,
 }: any) => {
 
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] =
+    useState<any>(null);
 
   useEffect(() => {
 
@@ -20,18 +21,25 @@ export const AuthProvider = ({
 
     if (storedUser) {
 
-      setUser(JSON.parse(storedUser));
+      setUser(
+        JSON.parse(storedUser)
+      );
     }
 
   }, []);
 
+  // =========================
+  // LOGOUT
+  // =========================
+
   const logout = () => {
 
-    sessionStorage.removeItem("token");
-
-    sessionStorage.removeItem("user");
+    sessionStorage.clear();
 
     setUser(null);
+
+    window.location.href =
+      "/login";
   };
 
   return (

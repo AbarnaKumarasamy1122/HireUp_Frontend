@@ -1,24 +1,22 @@
-import axios from "axios";
-import { API_BASE } from "../utils/api";
+import api from "../utils/api";
 
-const API = API_BASE;
 
 // IMAGEKIT AUTH
 export const getImageKitAuth = async () => {
-  return axios.get(`${API}/api/imagekit-auth/`);
+  return api.get("/api/imagekit-auth/");
 };
 
 // REGISTER
 export const registerUser = async (data: any) => {
-  return axios.post(
-    `${API}/api/users/register/`,
+  return api.post(
+    "/api/users/register/",
     data
   );
 };
 
 // LOGIN
 export const loginUser = (email: string, password: string) => {
-  return axios.post(`${API}/api/users/login/`, {
+  return api.post("/api/users/login/", {
     email,
     password,
   });
@@ -26,41 +24,41 @@ export const loginUser = (email: string, password: string) => {
 
 // ADMIN PROFILE
 export const getAdminProfile = async (id: number) => {
-  return axios.get(`${API_BASE}/api/users/admin-profile/${id}/`);
+  return api.get(`/api/users/admin-profile/${id}/`);
 };
 
 export const updateAdminProfile = async (id: number, data: any) => {
-  return axios.put(`${API_BASE}/api/users/update-admin-profile/${id}/`, data);
+  return api.put(`/api/users/update-admin-profile/${id}/`, data);
 };
 
 
 // GET PENDING COMPANIES
 export const getPendingCompanies = async () => {
 
-  return axios.get(
-    `${API}/api/users/pending-companies/`
+  return api.get(
+    "/api/users/pending-companies/"
   );
 };
 
 
 // APPROVE COMPANY
 export const approveCompany = async (id: number) => {
-  return axios.put(`${API}/api/users/approve-company/${id}/`);
+  return api.put(`/api/users/approve-company/${id}/`);
 };
 
 // REJECT COMPANY
 export const rejectCompany = async (id: number) => {
-  return axios.put(`${API}/api/users/reject-company/${id}/`);
+  return api.put(`/api/users/reject-company/${id}/`);
 };
 
 // GET ALL COMPANIES (ADMIN)
 export const getAllCompanies = async () => {
-  return axios.get(`${API}/api/users/all-companies/`);
+  return api.get(`/api/users/all-companies/`);
 };
 
 // SEND OTP
 export const sendOTP = (email: string) => {
-  return axios.post(`${API}/api/users/send-otp/`, {
+  return api.post("/api/users/send-otp/", {
     email,
   });
 };
@@ -71,10 +69,45 @@ export const resetPassword = (
   otp: string,
   new_password: string
 ) => {
-  return axios.post(`${API}/api/users/reset-password/`, {
+  return api.post("/api/users/reset-password/", {
     email,
     otp,
     new_password,
   });
 };
 
+export const getCompanyProfile = (id: number) => {
+  return api.get(`/api/users/${id}/company-profile/`);
+};
+
+export const getCandidateProfile = (id: number) => {
+  return api.get(`/api/users/${id}/candidate-profile/`);
+};
+
+// JOBS
+export const createJob = (data: any) => {
+  return api.post("/api/jobs/post-job/", data);
+};
+
+export const getCompanyJobs = (id: number) =>
+  api.get(`/api/jobs/jobs/${id}/`);
+
+export const getJobDetail = (id: number) =>
+  api.get(`/api/jobs/job/${id}/`);
+
+export const updateJob = (id: number, data: any) =>
+  api.put(`/api/jobs/update-job/${id}/`, data);
+
+export const deleteJob = (id: number) =>
+  api.delete(`/api/jobs/delete-job/${id}/`);
+
+export const getAllJobs = () =>
+  api.get("/api/jobs/all-jobs/");
+
+// APPLICATIONS
+export const getCompanyApplications = (id: number) =>
+  api.get(`/api/applications/company/${id}/`);
+
+// ANALYTICS
+export const getCompanyAnalytics = (id: number) =>
+  api.get(`/api/companies/analytics/${id}/`);

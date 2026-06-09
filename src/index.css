@@ -76,6 +76,14 @@
     @apply text-muted;
   }
 
+  .input {
+    @apply w-full border border-border rounded-xl bg-background px-4 py-3 focus:ring-2 focus:ring-primary/30 transition;
+  }
+
+  .card-hover {
+    @apply hover:shadow-lg transition duration-300;
+  }
+
   /* =========================
      ANIMATIONS
   ========================= */
@@ -107,4 +115,14 @@
       opacity: 1;
     }
   }
+}
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

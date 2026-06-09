@@ -12,22 +12,54 @@ const Login = () => {
 
   const handleLogin = async () => {
 
-    const res = await loginUser(email, password);
+  try {
 
-    const { token, user } = res.data;
+    const res =
+      await loginUser(
+        email,
+        password
+      );
 
-    if (remember) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+    const {
+      token,
+      user,
+    } = res.data;
+
+    // SESSION STORAGE ONLY
+    sessionStorage.setItem(
+      "token",
+      token
+    );
+
+    sessionStorage.setItem(
+      "user",
+      JSON.stringify(user)
+    );
+
+    // ROLE BASED NAVIGATION
+    if (user.role === "admin") {
+
+      navigate("/admin/dashboard");
+
+    } else if (
+      user.role === "company"
+    ) {
+
+      navigate(`/company/${user.id}/dashboard`);
+
     } else {
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("user", JSON.stringify(user));
+
+      navigate(`/candidate/${user.id}/dashboard`);
     }
 
-    if (user.role === "candidate") navigate("/candidate/dashboard");
-    else if (user.role === "company") navigate("/company/dashboard");
-    else navigate("/admin/dashboard");
-  };
+  } catch (err: any) {
+
+    alert(
+      err.response?.data?.error ||
+      "Login failed"
+    );
+  }
+};
 
   return (
     <div className="bg-background">
@@ -59,7 +91,6 @@ const Login = () => {
                 </button>
               </div>
             </div>
-
           </div>
 
           {/* RIGHT SIDE */}

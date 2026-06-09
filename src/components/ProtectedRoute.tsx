@@ -1,22 +1,57 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 
 const ProtectedRoute = ({
   children,
   role,
 }: any) => {
 
-  const user = JSON.parse(
-    sessionStorage.getItem("user") || "null"
-  );
+  const location = useLocation();
+  const params = useParams();
 
-  if (!user) {
+  const storedUser = sessionStorage.getItem("user");
+  const token = sessionStorage.getItem("token");
 
-    return <Navigate to="/login" />;
+  if (!storedUser || !token) {
+    return (
+      <Navigate
+        to="/login"
+        state={{ from: location }}
+        replace
+      />
+    );
   }
 
-  if (role && user.role !== role) {
+  let user;
 
-    return <Navigate to="/" />;
+  try {
+    user = JSON.parse(storedUser);
+  } catch {
+    sessionStorage.clear();
+
+    return <Navigate to="/login" replace />;
+  }
+
+  // ROLE CHECK
+  if (role && user.role !== role) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // COMPANY VALIDATION
+  if (
+    role === "company" &&
+    params.id &&
+    Number(params.id) !== Number(user.id)
+  ) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // CANDIDATE VALIDATION
+  if (
+    role === "candidate" &&
+    params.id &&
+    Number(params.id) !== Number(user.id)
+  ) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;

@@ -1,13 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "/images/logo.png"
 import {
     LayoutDashboard,
     Building2,
     CheckCircle,
     Settings,
+    LogOut,
 } from "lucide-react";
 
+import { useAuth } from "../../context/AuthContext";
+
 const Sidebar = () => {
+    const navigate = useNavigate();
+    const { logout } = useAuth();
 
     const menus = [
         {
@@ -32,6 +37,20 @@ const Sidebar = () => {
         },
     ];
 
+    // =========================
+    // HANDLE LOGOUT
+    // =========================
+
+    const handleLogout = () => {
+
+        logout();
+
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        navigate("/login");
+    };
+
     return (
         <div className="w-65 min-h-screen border-r border-border bg-background p-5">
 
@@ -49,6 +68,7 @@ const Sidebar = () => {
 
             </div>
 
+            <div className="flex flex-col justify-between min-h-screen">
             {/* MENUS */}
             <div className="space-y-2">
 
@@ -69,7 +89,22 @@ const Sidebar = () => {
                 ))}
 
             </div>
+
+            {/* LOGOUT  */}
+            <button
+                onClick={handleLogout}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl bg-red-500 text-white hover:bg-red-600 dark:hover:bg-red-950 transition cursor-pointer"
+            >
+
+                <LogOut size={20} />
+
+                <span>Logout</span>
+
+            </button>
+            </div>
         </div>
+
+
     );
 };
 

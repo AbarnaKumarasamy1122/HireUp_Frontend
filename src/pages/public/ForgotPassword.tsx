@@ -42,7 +42,7 @@ const ForgotPassword = () => {
 
         <button
           onClick={handleSendOTP}
-          className="btn-primary w-full mt-5 py-3"
+          className="btn-primary w-full mt-5 py-3 cursor-pointer"
         >
           Send OTP
         </button>

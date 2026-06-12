@@ -1,32 +1,53 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { resetPassword } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const ResetPassword = () => {
   const { state } = useLocation();
   const email = state?.email;
   const otp = state?.otp;
 
+  const toast = useToast();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const navigate = useNavigate();
 
-  const handleReset = async () => {
-    if (!password || !confirmPassword)
-      return alert("All fields required");
+  const validatePassword = (pwd: string) => {
+    return pwd.length >= 6;
+  };
 
-    if (password !== confirmPassword)
-      return alert("Passwords do not match");
+  const handleReset = async () => {
+    if (!email || !otp) {
+      toast.error("Invalid reset session. Try again.");
+      return;
+    }
+
+    if (!password || !confirmPassword) {
+      toast.error("All fields are required");
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
     try {
       await resetPassword(email, otp, password);
 
-      alert("Password updated successfully");
+      toast.success("Password updated successfully");
       navigate("/login");
 
     } catch (err: any) {
-      alert(err.response?.data?.error || "Reset failed");
+      toast.error(err.response?.data?.error || "Reset failed");
     }
   };
 

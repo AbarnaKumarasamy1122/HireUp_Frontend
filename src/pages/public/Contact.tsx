@@ -82,7 +82,7 @@ const Contact = () => {
               className="w-full border border-border rounded-xl px-4 py-3"
             />
 
-            <button className="btn-primary w-full py-3">
+            <button className="btn-primary w-full py-3 cursor-pointer">
               Send Message
             </button>
 

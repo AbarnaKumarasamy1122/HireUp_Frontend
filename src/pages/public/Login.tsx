@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const Login = () => {
+
+  const toast = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,54 +15,67 @@ const Login = () => {
 
   const handleLogin = async () => {
 
-  try {
-
-    const res =
-      await loginUser(
-        email,
-        password
-      );
-
-    const {
-      token,
-      user,
-    } = res.data;
-
-    // SESSION STORAGE ONLY
-    sessionStorage.setItem(
-      "token",
-      token
-    );
-
-    sessionStorage.setItem(
-      "user",
-      JSON.stringify(user)
-    );
-
-    // ROLE BASED NAVIGATION
-    if (user.role === "admin") {
-
-      navigate("/admin/dashboard");
-
-    } else if (
-      user.role === "company"
-    ) {
-
-      navigate(`/company/${user.id}/dashboard`);
-
-    } else {
-
-      navigate(`/candidate/${user.id}/dashboard`);
+    // VALIDATION
+    if (!email || !password) {
+      toast.error("Email and password are required");
+      return;
     }
 
-  } catch (err: any) {
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
 
-    alert(
-      err.response?.data?.error ||
-      "Login failed"
-    );
-  }
-};
+    try {
+
+      const res =
+        await loginUser(
+          email,
+          password
+        );
+
+      const {
+        token,
+        user,
+      } = res.data;
+
+      // SESSION STORAGE ONLY
+      sessionStorage.setItem(
+        "token",
+        token
+      );
+
+      sessionStorage.setItem(
+        "user",
+        JSON.stringify(user)
+      );
+
+      toast.success("Login successful!");
+
+      // ROLE BASED NAVIGATION
+      if (user.role === "admin") {
+
+        navigate("/admin/dashboard");
+
+      } else if (
+        user.role === "company"
+      ) {
+
+        navigate(`/company/${user.id}/dashboard`);
+
+      } else {
+
+        navigate(`/candidate/${user.id}/dashboard`);
+      }
+
+    } catch (err: any) {
+
+      toast.error(
+        err.response?.data?.error ||
+        "Login failed"
+      );
+    }
+  };
 
   return (
     <div className="bg-background">

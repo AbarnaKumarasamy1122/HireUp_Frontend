@@ -3,8 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../services/authService";
 import { imagekit } from "../../utils/imagekit";
 import axios from "axios";
+import { useToast } from "../../components/Toast";
 
 const Signup = () => {
+
+  const toast = useToast();
 
   const navigate = useNavigate();
 
@@ -54,7 +57,65 @@ const Signup = () => {
     return response.url;
   };
 
+  const validateEmail = (email: string) => {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
+  const validatePhone = (phone: string) => {
+      // allows: +94, +1, 077..., 9477..., etc.
+      return /^[+]?[\d\s]{7,15}$/.test(phone);
+    };
+
   const handleSignup = async () => {
+    
+    // COMMON VALIDATION
+    if (!form.email || !form.password) {
+      toast.error("Email and password are required");
+      return;
+    }
+
+    if (!validateEmail(form.email)) {
+      toast.error("Invalid email format");
+      return;
+    }
+
+    // PHONE VALIDATION (NEW)
+    if (!validatePhone(form.companyContact)) {
+      toast.error("Invalid phone number (7–15 digits required)");
+      return;
+    }
+
+    if (form.password.length < 6) {
+      toast.error("Password must be at least 6 characters");
+      return;
+    }
+
+    // CANDIDATE VALIDATION
+    if (tab === "candidate") {
+      if (!form.firstName || !form.lastName) {
+        toast.error("First name and last name are required");
+        return;
+      }
+    }
+
+    // COMPANY VALIDATION
+    if (tab === "company") {
+      if (
+        !form.companyName ||
+        !form.companyAddress ||
+        !form.companyContact ||
+        !form.companyWebsite ||
+        !form.companyDescription
+      ) {
+        toast.error("All company fields are required");
+        return;
+      }
+
+      if (!document) {
+        toast.error("Verification document is required");
+        return;
+      }
+    }
 
     try {
 
@@ -99,7 +160,7 @@ const Signup = () => {
         verified_document:
           documentUrl,
       });
-      alert(
+      toast.success(
         tab === "company"
           ? "Registration submitted for admin approval"
           : "Account created successfully"
@@ -109,8 +170,8 @@ const Signup = () => {
 
     } catch (err: any) {
 
-      alert(
-        err.response?.data?.error
+      toast.error(
+        err.response?.data?.error || "Signup failed"
       );
     }
   };
@@ -246,7 +307,7 @@ const Signup = () => {
                     onChange={(e) =>
                       setForm({
                         ...form,
-                        companyContact: e.target.value
+                        companyContact: e.target.value.replace(/[^0-9+]/g, "")
                       })
                     }
                   />
@@ -273,7 +334,7 @@ const Signup = () => {
                       })
                     }
                   />
-                  
+
                   <label className="block text-sm font-medium text-gray-700">
                     Upload Verification Document
                   </label>

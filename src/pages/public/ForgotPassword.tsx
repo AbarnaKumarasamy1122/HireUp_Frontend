@@ -1,23 +1,37 @@
 import { useState } from "react";
 import { sendOTP } from "../../services/authService";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "../../components/Toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const handleSendOTP = async () => {
-    if (!email) return alert("Email is required");
+    if (!email) {
+      toast.error("Email is required");
+      return;
+    }
 
+    if (!validateEmail(email)) {
+      toast.error("Enter a valid email address");
+      return;
+    }
+    
     try {
       await sendOTP(email);
 
-      alert("OTP sent successfully");
+      toast.success("OTP sent successfully");
 
       navigate("/verify-otp", { state: { email } });
 
     } catch (err: any) {
-      alert(err.response?.data?.error || "Failed to send OTP");
+      toast.error(err.response?.data?.error || "Failed to send OTP");
     }
   };
 

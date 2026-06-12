@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
-import {
-  getAllCompanies,
-} from "../../services/authService";
+import { getAllCompanies } from "../../services/authService";
 
 const ViewCompanies = () => {
   const [companies, setCompanies] = useState<any[]>([]);
   const [filter, setFilter] = useState("approved");
+  const [loading, setLoading] = useState(true);
 
   const loadCompanies = async () => {
-    const res = await getAllCompanies();
-    setCompanies(res.data);
+    try {
+      setLoading(true);
+
+      const res = await getAllCompanies();
+      setCompanies(res.data);
+
+    } catch (err) {
+      console.log("Failed to load companies", err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -26,13 +34,16 @@ const ViewCompanies = () => {
 
       {/* HEADER */}
       <div className="max-w-6xl mx-auto mb-6">
-        <h1 className="text-3xl font-bold">Company Management</h1>
-        <p className="text-muted">Approve, reject or review companies</p>
+        <h1 className="text-3xl font-bold">
+          Company Management
+        </h1>
+        <p className="text-muted mt-2">
+          Approve, reject or review companies
+        </p>
       </div>
 
       {/* FILTER BUTTONS */}
       <div className="max-w-6xl mx-auto flex gap-3 mb-6 flex-wrap">
-
         {["approved", "rejected", "pending", "all"].map((status) => (
           <button
             key={status}
@@ -48,63 +59,76 @@ const ViewCompanies = () => {
         ))}
       </div>
 
-      {/* GRID */}
-      <div className="max-w-6xl mx-auto grid gap-6 md:grid-cols-2">
+      {/* LOADING STATE */}
+      {loading ? (
+        <div className="max-w-6xl mx-auto text-center py-10 text-muted">
+          Loading companies...
+        </div>
+      ) : filteredCompanies.length === 0 ? (
+        <div className="max-w-6xl mx-auto text-center py-10 text-muted">
+          No companies found.
+        </div>
+      ) : (
+        <div className="max-w-6xl mx-auto grid gap-6 md:grid-cols-1">
 
-        {filteredCompanies.map((company) => (
-          <div key={company.id} className="card p-5 hover:shadow-lg transition rounded-xl fade-up">
+          {filteredCompanies.map((company) => (
+            <div
+              key={company.id}
+              className="card p-5 hover:shadow-lg transition rounded-xl fade-up"
+            >
 
-            {/* NAME + STATUS */}
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold">
-                {company.company_name}
-              </h2>
+              {/* NAME + STATUS */}
+              <div className="flex justify-between items-center">
+                <h2 className="text-xl font-bold">
+                  {company.company_name}
+                </h2>
 
-              <span
-                className={`px-3 py-1 text-xs rounded-full font-medium ${
-                  company.company_status === "approved"
-                    ? "bg-green-100 text-green-700"
-                    : company.company_status === "rejected"
-                    ? "bg-red-100 text-red-700"
-                    : "bg-yellow-100 text-yellow-700"
-                }`}
-              >
-                {company.company_status.toUpperCase()}
-              </span>
+                <span
+                  className={`px-3 py-1 text-xs rounded-full font-medium ${
+                    company.company_status === "approved"
+                      ? "bg-green-100 text-green-700"
+                      : company.company_status === "rejected"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {company.company_status.toUpperCase()}
+                </span>
+              </div>
+
+              {/* DETAILS */}
+              <div className="mt-3 text-sm space-y-1">
+                <p>{company.company_description}</p>
+                <p className="flex items-center gap-2 mt-4">
+                  📧 {company.email}
+                </p>
+                <p className="flex items-center gap-2">
+                  📞 {company.company_contact}
+                </p>
+                <p className="flex items-center gap-2">
+                  🌐 {company.company_website}
+                </p>
+                <p className="flex items-center gap-2">
+                  📍 {company.company_address}
+                </p>
+              </div>
+
+              {/* DOCUMENT */}
+              {company.verified_document && (
+                <a
+                  href={company.verified_document}
+                  target="_blank"
+                  className="text-primary underline text-sm mt-3 block"
+                >
+                  View Document →
+                </a>
+              )}
+
             </div>
+          ))}
 
-            {/* DETAILS */}
-            <div className="mt-3 text-sm space-y-1">
-              <p>{company.company_description}</p>
-              <p className="flex items-center gap-2 mt-4">
-                <span>📧</span> {company.email}
-              </p>
-              <p className="flex items-center gap-2">
-                <span>📞</span> {company.company_contact}
-              </p>
-              <p className="flex items-center gap-2">
-                <span>🌐</span> {company.company_website}
-              </p>
-              <p className="flex items-center gap-2">
-                <span>📍</span> {company.company_address}
-              </p>
-            </div>
-
-            {/* DOCUMENT */}
-            {company.verified_document && (
-              <a
-                href={company.verified_document}
-                target="_blank"
-                className="text-primary underline text-sm mt-3 block"
-              >
-                View Document →
-              </a>
-            )}
-
-          </div>
-        ))}
-
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -18,7 +18,7 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminLayout from "../pages/admin/AdminLayout";
 import ApproveCompanies from "../pages/admin/ApproveCompanies";
 import ViewCompanies from "../pages/admin/ViewCompanies";
-import Settings from "../pages/admin/Settings";
+import AdminSettings from "../pages/admin/AdminSettings";
 import CompanyLayout from "../pages/company/CompanyLayout";
 import Analytics from "../pages/company/Analytics";
 import ManageJobs from "../pages/company/ManageJobs";
@@ -79,7 +79,7 @@ const AppRoutes = () => {
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="approve-companies" element={<ApproveCompanies />} />
           <Route path="companies" element={<ViewCompanies />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
 
       </Route>

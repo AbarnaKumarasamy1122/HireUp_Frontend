@@ -63,6 +63,13 @@ export const sendOTP = (email: string) => {
   });
 };
 
+export const verifyOTP = (email: string, otp: string) => {
+  return api.post("/api/users/verify-otp/", {
+    email,
+    otp,
+  });
+};
+
 // RESET PASSWORD
 export const resetPassword = (
   email: string,

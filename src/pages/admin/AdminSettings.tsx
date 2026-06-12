@@ -7,8 +7,11 @@ import {
 } from "../../services/authService";
 
 import { imagekit } from "../../utils/imagekit";
+import { useToast } from "../../components/Toast";
 
-const Settings = () => {
+const AdminSettings = () => {
+
+  const toast = useToast();
 
   const storedUser = JSON.parse(
     sessionStorage.getItem("user") ||
@@ -28,6 +31,8 @@ const Settings = () => {
     email: "",
     profile_image: "",
   });
+
+  const [saving, setSaving] = useState(false);
 
   // ======================
   // LOAD ADMIN
@@ -78,7 +83,15 @@ const Settings = () => {
   // UPDATE PROFILE
   // ======================
   const handleUpdate = async () => {
+
+    if (!form.first_name || !form.last_name) {
+      toast.error("First name and last name are required");
+      return;
+    }
+
     try {
+
+      setSaving(true);
       let imageUrl = form.profile_image;
 
       if (image) {
@@ -93,14 +106,15 @@ const Settings = () => {
 
       // update storage
       sessionStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("user", JSON.stringify(res.data.user));
 
-      alert("Profile updated successfully");
+      toast.success("Profile updated successfully");
       setEditing(false);
       loadAdmin();
 
     } catch (err: any) {
-      alert(err.response?.data?.error || "Update failed");
+      toast.error(err.response?.data?.error || "Update failed");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -192,8 +206,8 @@ const Settings = () => {
           </button>
         ) : (
           <div className="flex gap-3">
-            <button onClick={handleUpdate} className="btn-primary cursor-pointer">
-              Save
+            <button onClick={handleUpdate} disabled={saving} className="btn-primary cursor-pointer">
+              {saving ? "Saving..." : "Save"}
             </button>
 
             <button
@@ -210,4 +224,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default AdminSettings;

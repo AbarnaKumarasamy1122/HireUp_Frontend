@@ -9,8 +9,11 @@ import {
 } from "lucide-react";
 
 import { createJob } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const PostJob = () => {
+
+  const toast = useToast();
 
   const user = JSON.parse(
     sessionStorage.getItem("user") || "{}"
@@ -38,7 +41,7 @@ const PostJob = () => {
         ...form,
       });
 
-      alert("Job posted successfully");
+      toast.success("Job posted successfully");
 
       setForm({
         title: "",
@@ -53,7 +56,7 @@ const PostJob = () => {
 
       console.log(err);
 
-      alert("Failed to post job");
+      toast.error("Failed to post job");
 
     } finally {
 
@@ -283,7 +286,7 @@ const PostJob = () => {
         <div className="mt-8 flex justify-end">
 
           <button
-            className="btn-primary w-full sm:w-auto px-8 py-3 text-lg font-medium"
+            className="btn-primary w-full sm:w-auto px-8 py-3 text-lg font-medium cursor-pointer"
             onClick={submit}
             disabled={loading}
           >

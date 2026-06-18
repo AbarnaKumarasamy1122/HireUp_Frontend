@@ -15,7 +15,6 @@ const AdminSettings = () => {
 
   const storedUser = JSON.parse(
     sessionStorage.getItem("user") ||
-    localStorage.getItem("user") ||
     "{}"
   );
 

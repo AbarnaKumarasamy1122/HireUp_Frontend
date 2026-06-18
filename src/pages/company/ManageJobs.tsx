@@ -60,7 +60,9 @@ const ManageJobs = () => {
 
   useEffect(() => {
     const anyModalOpen = selectedJob || deleteConfirmJob;
+
     document.body.style.overflow = anyModalOpen ? "hidden" : "auto";
+
     return () => {
       document.body.style.overflow = "auto";
     };
@@ -144,7 +146,7 @@ const ManageJobs = () => {
               </p>
 
               <div className="flex flex-wrap gap-3 text-sm text-muted">
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1 capitalize">
                   <Briefcase size={14} />
                   {job.location_type}
                 </span>
@@ -158,17 +160,22 @@ const ManageJobs = () => {
                   <Wallet size={14} />
                   {job.salary}
                 </span>
+
+                <span className="flex items-center gap-1">
+                  <Calendar size={14} />
+                  Deadline: {job.deadline}
+                </span>
               </div>
             </div>
 
-            <div className="flex flex-wrap lg:flex-col gap-2 lg:items-end">
-              <button onClick={() => openView(job)}>
+            <div className="flex flex-wrap lg:flex-row gap-2 lg:items-end">
+              <button onClick={() => openView(job)} className="flex items-center gap-1 text-primary cursor-pointer">
                 <Eye size={18} />
               </button>
-              <button onClick={() => openEdit(job)}>
+              <button onClick={() => openEdit(job)} className="flex items-center gap-1 cursor-pointer">
                 <Pencil size={18} />
               </button>
-              <button onClick={() => openDeleteConfirm(job)}>
+              <button onClick={() => openDeleteConfirm(job)} className="flex items-center gap-1 cursor-pointer">
                 <Trash2 size={18} className="text-red-500" />
               </button>
             </div>
@@ -178,26 +185,37 @@ const ManageJobs = () => {
 
       {/* ================= VIEW MODAL ================= */}
       {selectedJob && !editMode && (
-        <div className="fixed inset-0 z-[99999] bg-black/60 flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
-          <div className="w-full max-w-4xl bg-background rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-background border-b flex justify-between p-4">
-              <h2 className="font-bold">{selectedJob.title}</h2>
-              <button onClick={closeModal}>
+        <div className="fixed inset-0 z-[99999] bg-black/60 flex justify-center">
+
+          <div className="h-screen pb-20 w-full max-w-5xl bg-background shadow-2xl flex flex-col overflow-hidden">
+
+            {/* HEADER */}
+            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-border bg-background">
+              <h2 className="font-bold text-lg truncate">
+                {selectedJob.title}
+              </h2>
+
+              <button
+                onClick={closeModal}
+                className="p-2 rounded-full hover:bg-border cursor-pointer"
+              >
                 <X />
               </button>
             </div>
 
-            <div className="p-4 space-y-6">
+            <div className="flex-1 overflow-y-auto scrollbar-hide p-5 space-y-6">
+
               <p className="text-muted whitespace-pre-wrap break-words">
                 {selectedJob.description}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Info icon={ <Briefcase size={16} />} label="Job Type" value={selectedJob.location_type} />
-                <Info icon={ <MapPin size={16} />} label="Location" value={selectedJob.location} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 capitalize">
+                <Info icon={<Briefcase size={16} />} label="Job Type" value={selectedJob.location_type} />
+                <Info icon={<MapPin size={16} />} label="Location" value={selectedJob.location} />
                 <Info icon={<Wallet size={16} />} label="Salary" value={selectedJob.salary} />
                 <Info icon={<Calendar size={16} />} label="Deadline" value={selectedJob.deadline} />
               </div>
+
             </div>
           </div>
         </div>
@@ -205,62 +223,111 @@ const ManageJobs = () => {
 
       {/* ================= EDIT MODAL (FIXED MOBILE) ================= */}
       {selectedJob && editMode && (
-        <div className="fixed inset-0 z-[99999] bg-black/60 flex items-start sm:items-center justify-center p-3 sm:p-4 overflow-y-auto">
-          <div className="w-full max-w-3xl bg-background rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 space-y-5 pb-10">
-            
-            <div className="flex justify-between items-center">
-              <h2 className="font-bold">Edit Job</h2>
-              <button onClick={closeModal}>
+        <div className="fixed inset-0 z-[99999] bg-black/60 flex justify-center">
+
+          <div className="h-screen pb-20 w-full max-w-4xl bg-background shadow-2xl flex flex-col overflow-hidden">
+
+            {/* HEADER */}
+            <div className="sticky top-0 z-10 flex items-center justify-between px-5 py-4 border-b border-border bg-background">
+              <h2 className="font-bold text-lg">Edit Job</h2>
+
+              <button
+                onClick={closeModal}
+                className="p-2 rounded-full hover:bg-border cursor-pointer"
+              >
                 <X />
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Field label="Job Title">
-                <input className="input w-full" value={editForm.title}
-                  onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}/>
+            <div className="flex-1 overflow-y-auto scrollbar-hide p-5 space-y-5">
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                <Field label="Job Title">
+                  <input
+                    className="input w-full"
+                    value={editForm.title}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </Field>
+
+                <Field label="Salary">
+                  <input
+                    className="input w-full"
+                    value={editForm.salary}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, salary: e.target.value })
+                    }
+                  />
+                </Field>
+
+                <Field label="Work Type">
+                  <select
+                    className="input w-full cursor-pointer"
+                    value={editForm.location_type}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, location_type: e.target.value })
+                    }
+                  >
+                    <option value="remote">Remote</option>
+                    <option value="onsite">Onsite</option>
+                    <option value="hybrid">Hybrid</option>
+                  </select>
+                </Field>
+
+                <Field label="Location">
+                  <input
+                    className="input w-full"
+                    value={editForm.location}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, location: e.target.value })
+                    }
+                  />
+                </Field>
+
+                <Field label="Deadline">
+                  <input
+                    type="date"
+                    className="input w-full"
+                    value={editForm.deadline}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, deadline: e.target.value })
+                    }
+                  />
+                </Field>
+              </div>
+
+              <Field label="Description">
+                <textarea
+                  className="input w-full"
+                  rows={6}
+                  value={editForm.description}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, description: e.target.value })
+                  }
+                />
               </Field>
 
-              <Field label="Salary">
-                <input className="input w-full" value={editForm.salary}
-                  onChange={(e) => setEditForm({ ...editForm, salary: e.target.value })}/>
-              </Field>
+              {/* ACTIONS */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-4">
+                <button
+                  className="btn-primary w-full cursor-pointer"
+                  onClick={saveEdit}
+                >
+                  Save Changes
+                </button>
 
-              <Field label="Work Type">
-                <select className="input w-full" value={editForm.location_type}
-                  onChange={(e) => setEditForm({ ...editForm, location_type: e.target.value })}>
-                  <option value="remote">Remote</option>
-                  <option value="onsite">Onsite</option>
-                  <option value="hybrid">Hybrid</option>
-                </select>
-              </Field>
+                <button
+                  className="w-full border border-gray-400 rounded-lg py-2 cursor-pointer"
+                  onClick={closeModal}
+                >
+                  Cancel
+                </button>
+              </div>
 
-              <Field label="Location">
-                <input className="input w-full" value={editForm.location}
-                  onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}/>
-              </Field>
-
-              <Field label="Deadline">
-                <input type="date" className="input w-full" value={editForm.deadline}
-                  onChange={(e) => setEditForm({ ...editForm, deadline: e.target.value })}/>
-              </Field>
             </div>
-
-            <Field label="Description">
-              <textarea className="input w-full" rows={5}
-                value={editForm.description}
-                onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}/>
-            </Field>
-
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button className="btn-primary w-full" onClick={saveEdit}>
-                Save Changes
-              </button>
-              <button className="w-full border rounded-lg py-2" onClick={closeModal}>
-                Cancel
-              </button>
-            </div>
-
           </div>
         </div>
       )}
@@ -268,8 +335,8 @@ const ManageJobs = () => {
       {/* ================= DELETE MODAL ================= */}
       {deleteConfirmJob && (
         <div className="fixed inset-0 z-[99999] bg-black/60 flex items-center justify-center p-3">
-          <div className="w-full max-w-md bg-background rounded-2xl p-6 text-center space-y-5">
-            <AlertTriangle className="mx-auto text-red-600" />
+          <div className="w-full max-w-md bg-background rounded-2xl p-6 text-center space-y-3">
+            <AlertTriangle size={48} className="mx-auto text-red-600" />
             <h2 className="font-bold">Delete Job</h2>
 
             <p className="text-muted">
@@ -277,12 +344,12 @@ const ManageJobs = () => {
               <span className="font-semibold">{deleteConfirmJob.title}</span>?
             </p>
 
-            <button className="w-full bg-red-600 text-white py-2 rounded-lg"
+            <button className="w-full bg-red-600 text-white py-2 rounded-lg cursor-pointer"
               onClick={confirmDelete}>
               Delete
             </button>
 
-            <button className="w-full border py-2 rounded-lg"
+            <button className="w-full border border-gray-400 py-2 rounded-lg cursor-pointer"
               onClick={closeDeleteConfirm}>
               Cancel
             </button>

@@ -28,8 +28,8 @@ const AdminSidebar = ({ open = false, onClose }: AdminSidebarProps) => {
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
     navigate("/login");
   };
 
@@ -62,7 +62,7 @@ const AdminSidebar = ({ open = false, onClose }: AdminSidebarProps) => {
         {/* Close button (mobile only) */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           aria-label="Close menu"
         >
           <X size={20} />

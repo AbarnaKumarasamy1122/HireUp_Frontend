@@ -123,7 +123,7 @@ export const ToastProvider = ({ children }: Props) => {
             {/* CLOSE */}
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-gray-500 hover:text-black"
+              className="text-gray-500 hover:text-black cursor-pointer"
             >
               <X size={18} />
             </button>

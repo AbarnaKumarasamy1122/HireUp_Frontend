@@ -42,7 +42,7 @@ const CompanySidebar = ({
     },
     {
       name: "Applicants",
-      path: `/company/${id}/applications`,
+      path: `/company/${id}/applicants`,
       icon: <Users size={20} />,
     },
     {
@@ -81,7 +81,7 @@ const CompanySidebar = ({
         {/* Mobile Close Button */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
         >
           <X size={20} />
         </button>
@@ -130,7 +130,7 @@ const CompanySidebar = ({
         <div className="p-4 border-t border-border">
           <button
             onClick={logout}
-            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition"
+            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition cursor-pointer"
           >
             <LogOut size={18} />
             Logout

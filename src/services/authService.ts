@@ -87,10 +87,6 @@ export const getCompanyProfile = (id: number) => {
   return api.get(`/api/users/${id}/company-profile/`);
 };
 
-export const getCandidateProfile = (id: number) => {
-  return api.get(`/api/users/${id}/candidate-profile/`);
-};
-
 // JOBS
 export const createJob = (data: any) => {
   return api.post("/api/jobs/post-job/", data);
@@ -113,8 +109,48 @@ export const getAllJobs = () =>
 
 // APPLICATIONS
 export const getCompanyApplications = (id: number) =>
-  api.get(`/api/applications/company/${id}/`);
+  api.get(`/api/applications/company-applications/${id}/`);
 
 // ANALYTICS
 export const getCompanyAnalytics = (id: number) =>
   api.get(`/api/companies/analytics/${id}/`);
+
+
+export const getCandidateProfile = (id: number) => {
+  return api.get(`/api/users/${id}/candidate-profile/`);
+};
+
+// APPLICATIONS
+export const applyJob = (data: any) =>
+  api.post("/api/applications/apply-job/", data);
+
+export const getMyApplications = () =>
+  api.get("/api/applications/candidate-applications/");
+
+// INTERVIEWS
+export const getMyInterviews = () =>
+  api.get("/api/interviews/my-interviews/");
+
+// NOTIFICATIONS
+export const getMyNotifications = () =>
+  api.get("/api/notifications/my-notifications/");
+
+// SAVED JOBS
+export const getSavedJobs = () =>
+  api.get("/api/saved-jobs/my-saved-jobs/");
+
+export const saveJob = (job_id: number) =>
+  api.post("/api/saved-jobs/save-job/", { job_id });
+
+export const removeSavedJob = (job_id: number) =>
+  api.delete(`/api/saved-jobs/remove-saved-job/${job_id}/`);
+
+export const getAppliedJobIds = () =>
+  api.get("/api/applications/applied-job-ids/");
+
+export const getSavedJobIds = () =>
+  api.get("/api/saved-jobs/saved-job-ids/");
+
+// RESUME UPDATE
+export const updateResume = (id: number, resume_url: string) =>
+  api.put(`/api/users/update-resume/${id}/`, { resume_url });

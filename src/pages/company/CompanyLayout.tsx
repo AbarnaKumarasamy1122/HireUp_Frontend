@@ -23,7 +23,7 @@ const CompanyLayout = () => {
 
           <button
             onClick={() => setOpen(true)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           >
             <Menu size={22} />
           </button>

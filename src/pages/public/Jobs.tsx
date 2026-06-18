@@ -82,13 +82,13 @@ const Jobs = () => {
     return `${years} years ago`;
   };
 
-  // ✅ FIXED APPLY LOGIC
+  // FIXED APPLY LOGIC
   const handleApply = (job: any) => {
 
     const token = sessionStorage.getItem("token");
     const user = JSON.parse(sessionStorage.getItem("user") || "{}");
 
-    // ❌ NOT LOGGED IN
+    // NOT LOGGED IN
     if (!token) {
       toast.info("Please login as a candidate to apply for jobs.");
 
@@ -99,13 +99,13 @@ const Jobs = () => {
       return;
     }
 
-    // ❌ LOGGED IN BUT NOT CANDIDATE
+    // LOGGED IN BUT NOT CANDIDATE
     if (user.role !== "candidate") {
       toast.info("Only candidates can apply for jobs.");
       return;
     }
 
-    // ✅ ALLOW APPLY
+    // ALLOW APPLY
     navigate(`/jobs/${job.id}`);
   };
 

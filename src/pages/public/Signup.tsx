@@ -61,10 +61,10 @@ const Signup = () => {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
 
-  const validatePhone = (phone: string) => {
-      // allows: +94, +1, 077..., 9477..., etc.
-      return /^[+]?[\d\s]{7,15}$/.test(phone);
-    };
+  // const validatePhone = (phone: string) => {
+  //     // allows: +94, +1, 077..., 9477..., etc.
+  //     return /^[+]?[\d\s]{7,15}$/.test(phone);
+  //   };
 
   const handleSignup = async () => {
     
@@ -80,10 +80,10 @@ const Signup = () => {
     }
 
     // PHONE VALIDATION (NEW)
-    if (!validatePhone(form.companyContact)) {
-      toast.error("Invalid phone number (7–15 digits required)");
-      return;
-    }
+    // if (!validatePhone(form.companyContact)) {
+    //   toast.error("Invalid phone number (7–15 digits required)");
+    //   return;
+    // }
 
     if (form.password.length < 6) {
       toast.error("Password must be at least 6 characters");

@@ -12,7 +12,6 @@ import ResetPassword from "../pages/public/ResetPassword";
 import Signup from "../pages/public/Signup";
 import MainLayout from "../layouts/MainLayout";
 import ProtectedRoute from "../components/ProtectedRoute";
-import CandidateDashboard from "../pages/candidate/CandidateDashboard";
 import CompanyDashboard from "../pages/company/CompanyDashboard";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminLayout from "../pages/admin/AdminLayout";
@@ -23,7 +22,16 @@ import CompanyLayout from "../pages/company/CompanyLayout";
 import Analytics from "../pages/company/Analytics";
 import ManageJobs from "../pages/company/ManageJobs";
 import PostJob from "../pages/company/PostJob";
-import Applicants from "../pages/company/Applicants";
+import CompanyApplicants from "../pages/company/CompanyApplicants";
+import CandidateLayout from "../pages/candidate/CandidateLayout";
+import CandidateDashboard from "../pages/candidate/CandidateDashboard";
+import CandidateProfile from "../pages/candidate/CandidateProfile";
+import MyApplications from "../pages/candidate/MyApplications";
+import ResumeUpload from "../pages/candidate/ResumeUpload";
+import SavedJobs from "../pages/candidate/SavedJobs";
+import CandidateNotifications from "../pages/candidate/CandidateNotifications";
+import InterviewSchedules from "../pages/candidate/InterviewSchedules";
+import BrowseJobs from "../pages/candidate/BrowseJobs";
 
 const AppRoutes = () => {
   return (
@@ -42,13 +50,21 @@ const AppRoutes = () => {
 
         {/* CANDIDATE */}
         <Route
-          path="/candidate/:id/dashboard"
+          path="/candidate/:id"
           element={
             <ProtectedRoute role="candidate">
-              <CandidateDashboard />
+              <CandidateLayout />
             </ProtectedRoute>
-          }
-        />
+          }>
+          <Route path="dashboard" element={<CandidateDashboard />} />
+          <Route path="browse-jobs" element={<BrowseJobs />} />
+          <Route path="applications" element={<MyApplications />} />
+          <Route path="interviews" element={<InterviewSchedules />} />
+          <Route path="resume" element={<ResumeUpload />} />
+          <Route path="saved-jobs" element={<SavedJobs />} />
+          <Route path="notifications" element={<CandidateNotifications />} />
+          <Route path="profile" element={<CandidateProfile />} />
+        </Route>
 
         {/* COMPANY */}
         <Route
@@ -62,7 +78,7 @@ const AppRoutes = () => {
           <Route path="dashboard" element={<CompanyDashboard />} />
           <Route path="post-job" element={<PostJob />} />
           <Route path="manage-jobs" element={<ManageJobs />} />
-          <Route path="applications" element={<Applicants />} />
+          <Route path="applicants" element={<CompanyApplicants />} />
           <Route path="analytics" element={<Analytics />} />
         </Route>
 

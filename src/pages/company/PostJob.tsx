@@ -30,40 +30,53 @@ const PostJob = () => {
     deadline: "",
   });
 
-  const submit = async () => {
+ const submit = async () => {
 
-    try {
+  // Validation
+  if (
+    !form.title.trim() ||
+    !form.description.trim() ||
+    !form.location_type.trim() ||
+    !form.location.trim() ||
+    !form.salary.trim() ||
+    !form.deadline
+  ) {
+    toast.error("Please fill all required fields");
+    return;
+  }
 
-      setLoading(true);
+  try {
 
-      await createJob({
-        company_id: user.id,
-        ...form,
-      });
+    setLoading(true);
 
-      toast.success("Job posted successfully");
+    await createJob({
+      company_id: user.id,
+      ...form,
+    });
 
-      setForm({
-        title: "",
-        description: "",
-        location_type: "remote",
-        location: "",
-        salary: "",
-        deadline: "",
-      });
+    toast.success("Job posted successfully");
 
-    } catch (err) {
+    setForm({
+      title: "",
+      description: "",
+      location_type: "remote",
+      location: "",
+      salary: "",
+      deadline: "",
+    });
 
-      console.log(err);
+  } catch (err) {
 
-      toast.error("Failed to post job");
+    console.log(err);
 
-    } finally {
+    toast.error("Failed to post job");
 
-      setLoading(false);
+  } finally {
 
-    }
-  };
+    setLoading(false);
+
+  }
+};
 
   return (
 
@@ -165,7 +178,7 @@ const PostJob = () => {
 
             <select
               value={form.location_type}
-              className="w-full border border-border rounded-xl bg-background px-4 py-3 focus:ring-2 focus:ring-primary/30"
+              className="w-full cursor-pointer border border-border rounded-xl bg-background px-4 py-3 focus:ring-2 focus:ring-primary/30"
               onChange={(e) =>
                 setForm({
                   ...form,

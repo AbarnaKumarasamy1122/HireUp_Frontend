@@ -26,7 +26,7 @@ const CandidateLayout = () => {
           </span>
         </div>
 
-        <main className="flex-1 p-4 md:p-8 bg-slate-50 dark:bg-slate-900">
+        <main className="flex-1 p-4 md:p-8 bg-slate-50 dark:bg-slate-100">
           <Outlet />
         </main>
 

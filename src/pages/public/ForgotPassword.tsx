@@ -5,6 +5,7 @@ import { useToast } from "../../components/Toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -23,6 +24,7 @@ const ForgotPassword = () => {
       return;
     }
     
+    setSending(true);
     try {
       await sendOTP(email);
 
@@ -31,7 +33,14 @@ const ForgotPassword = () => {
       navigate("/verify-otp", { state: { email } });
 
     } catch (err: any) {
-      toast.error(err.response?.data?.error || "Failed to send OTP");
+      toast.error(
+        err.response?.data?.error ||
+        (err.response?.status === 503
+          ? "Email service is temporarily unavailable. Please try again later."
+          : "Failed to send OTP"),
+      );
+    } finally {
+      setSending(false);
     }
   };
 
@@ -56,9 +65,10 @@ const ForgotPassword = () => {
 
         <button
           onClick={handleSendOTP}
-          className="btn-primary w-full mt-5 py-3 cursor-pointer"
+          disabled={sending}
+          className="btn-primary w-full mt-5 py-3 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         >
-          Send OTP
+          {sending ? "Sending OTP..." : "Send OTP"}
         </button>
 
       </div>

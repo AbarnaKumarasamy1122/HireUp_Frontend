@@ -8,8 +8,10 @@ const ProtectedRoute = ({
   const location = useLocation();
   const params = useParams();
 
-  const storedUser = sessionStorage.getItem("user");
-  const token = sessionStorage.getItem("token");
+  const storedUser =
+    localStorage.getItem("user") || sessionStorage.getItem("user");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   if (!storedUser || !token) {
     return (
@@ -26,7 +28,8 @@ const ProtectedRoute = ({
   try {
     user = JSON.parse(storedUser);
   } catch {
-    sessionStorage.clear();
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("user");
 
     return <Navigate to="/login" replace />;
   }

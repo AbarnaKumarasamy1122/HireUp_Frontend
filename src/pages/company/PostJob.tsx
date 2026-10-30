@@ -10,13 +10,14 @@ import {
 
 import { createJob } from "../../services/authService";
 import { useToast } from "../../components/Toast";
+import { getStoredValue } from "../../context/AuthContext";
 
 const PostJob = () => {
 
   const toast = useToast();
 
   const user = JSON.parse(
-    sessionStorage.getItem("user") || "{}"
+    getStoredValue("user") || "{}"
   );
 
   const [loading, setLoading] = useState(false);

@@ -1,9 +1,107 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "/images/logo.png";
-import { Search } from "lucide-react";
+import { ChevronDown, LogOut, Search } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const getDashboardPath = () => {
+    if (user?.role === "admin") return "/admin/dashboard";
+    if (user?.role === "company") return `/company/${user.id}/dashboard`;
+    return `/candidate/${user.id}/dashboard`;
+  };
+
+  const displayName =
+    user?.company_name ||
+    [user?.first_name, user?.last_name].filter(Boolean).join(" ") ||
+    user?.username ||
+    user?.email ||
+    "User";
+  const role = user?.role
+    ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
+    : "";
+  const initials = displayName
+    .split(" ")
+    .map((part: string) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  if (user) {
+    return (
+      <nav className="relative z-40 border-b border-border bg-background">
+        <div className="mx-auto flex items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <button
+            type="button"
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => navigate(getDashboardPath())}
+            aria-label="Go to dashboard"
+          >
+            <img src={logo} alt="HireUp Logo" className="h-12 w-12 rounded-lg" />
+            <span className="text-xl font-bold text-primary">HireUp</span>
+          </button>
+
+          <div className="relative">
+            <button
+              type="button"
+              className="flex items-center gap-3 rounded-xl px-2 py-1.5 hover:bg-slate-100 dark:hover:bg-slate-100 cursor-pointer"
+              onClick={() => setProfileOpen((isOpen) => !isOpen)}
+              aria-expanded={profileOpen}
+              aria-haspopup="menu"
+            >
+              {user.profile_image ? (
+                <img
+                  src={user.profile_image}
+                  alt={`${displayName} profile`}
+                  className="h-10 w-10 rounded-full object-cover"
+                />
+              ) : (
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary font-semibold text-white">
+                  {initials}
+                </span>
+              )}
+              <span className="hidden text-left sm:block">
+                <span className="block max-w-40 truncate text-sm font-semibold">
+                  {displayName}
+                </span>
+                <span className="block text-xs text-muted">{role}</span>
+              </span>
+              <ChevronDown
+                size={18}
+                className={`text-muted transition-transform ${profileOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+
+            {profileOpen && (
+              <div
+                className="absolute right-0 mt-2 w-56 rounded-xl border border-border bg-background p-2 shadow-lg"
+                role="menu"
+              >
+                <div className="border-b border-border px-3 py-2 sm:hidden">
+                  <p className="truncate text-sm font-semibold">{displayName}</p>
+                  <p className="text-xs text-muted">{role}</p>
+                </div>
+                <button
+                  type="button"
+                  className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 cursor-pointer"
+                  onClick={logout}
+                  role="menuitem"
+                >
+                  <LogOut size={17} />
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+    );
+  }
 
   return (
     <nav className="border-b border-border bg-background relative">

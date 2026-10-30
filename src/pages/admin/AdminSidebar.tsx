@@ -62,7 +62,7 @@ const AdminSidebar = ({ open = false, onClose }: AdminSidebarProps) => {
         {/* Close button (mobile only) */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-200 cursor-pointer"
           aria-label="Close menu"
         >
           <X size={20} />
@@ -88,7 +88,7 @@ const AdminSidebar = ({ open = false, onClose }: AdminSidebarProps) => {
                 `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
                   isActive
                     ? "bg-primary text-white"
-                    : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                    : "hover:bg-slate-100 dark:hover:bg-slate-200"
                 }`
               }
             >

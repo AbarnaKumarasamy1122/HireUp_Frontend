@@ -9,6 +9,7 @@ import {
 } from "../../services/authService";
 
 import { useToast } from "../../components/Toast";
+import { getStoredValue } from "../../context/AuthContext";
 
 const ResumeUpload = () => {
   const toast = useToast();
@@ -18,7 +19,7 @@ const ResumeUpload = () => {
   const [editing, setEditing] = useState(false);
 
   const storedUser = JSON.parse(
-    sessionStorage.getItem("user") || "{}"
+    getStoredValue("user") || "{}"
   );
 
   // =========================

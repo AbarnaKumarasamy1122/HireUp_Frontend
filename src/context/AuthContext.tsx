@@ -5,6 +5,19 @@ import {
   useState,
 } from "react";
 
+export const getStoredValue = (key: string) =>
+  localStorage.getItem(key) || sessionStorage.getItem(key);
+
+const setStoredValue = (key: string, value: string) => {
+  localStorage.setItem(key, value);
+  sessionStorage.setItem(key, value);
+};
+
+const removeStoredValue = (key: string) => {
+  localStorage.removeItem(key);
+  sessionStorage.removeItem(key);
+};
+
 const AuthContext = createContext<any>(null);
 
 export const AuthProvider = ({
@@ -16,14 +29,15 @@ export const AuthProvider = ({
 
   useEffect(() => {
 
-    const storedUser =
-      sessionStorage.getItem("user");
+    const storedUser = getStoredValue("user");
 
     if (storedUser) {
-
-      setUser(
-        JSON.parse(storedUser)
-      );
+      try {
+        setUser(JSON.parse(storedUser));
+        setStoredValue("user", storedUser);
+      } catch {
+        removeStoredValue("user");
+      }
     }
 
   }, []);
@@ -34,7 +48,9 @@ export const AuthProvider = ({
 
   const logout = () => {
 
-    sessionStorage.clear();
+    removeStoredValue("token");
+    removeStoredValue("refresh");
+    removeStoredValue("user");
 
     setUser(null);
 

@@ -2,14 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../services/authService";
 import { useToast } from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
 
   const toast = useToast();
+  const { setUser } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -40,15 +43,15 @@ const Login = () => {
       } = res.data;
 
       // SESSION STORAGE ONLY
-      sessionStorage.setItem(
-        "token",
-        token
-      );
-
-      sessionStorage.setItem(
-        "user",
-        JSON.stringify(user)
-      );
+      localStorage.setItem("token", token);
+      sessionStorage.setItem("token", token);
+      if (res.data.refresh) {
+        localStorage.setItem("refresh", res.data.refresh);
+        sessionStorage.setItem("refresh", res.data.refresh);
+      }
+      localStorage.setItem("user", JSON.stringify(user));
+      sessionStorage.setItem("user", JSON.stringify(user));
+      setUser(user);
 
       toast.success("Login successful!");
 
@@ -68,12 +71,25 @@ const Login = () => {
         navigate(`/candidate/${user.id}/dashboard`);
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const response =
+        typeof err === "object" &&
+        err !== null &&
+        "response" in err
+          ? (err as {
+              response?: {
+                data?: {
+                  error?: unknown;
+                };
+              };
+            }).response
+          : undefined;
+      const errorMessage =
+        typeof response?.data?.error === "string"
+          ? response.data.error
+          : "Login failed";
 
-      toast.error(
-        err.response?.data?.error ||
-        "Login failed"
-      );
+      toast.error(errorMessage);
     }
   };
 
@@ -142,12 +158,22 @@ const Login = () => {
                   Password
                 </label>
 
-                <input
-                  type="password"
-                  placeholder="Enter your password"
-                  className="w-full border border-border rounded-xl px-4 py-3 focus:border-primary focus:ring-2 focus:ring-primary/20 transition"
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Enter your password"
+                    className="w-full border border-border rounded-xl px-4 py-3 pr-12 focus:border-primary focus:ring-2 focus:ring-primary/20 transition"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((visible) => !visible)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-muted hover:text-primary cursor-pointer"
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                  </button>
+                </div>
               </div>
 
               <div className="flex items-center justify-between">
@@ -155,7 +181,6 @@ const Login = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <input
                     type="checkbox"
-                    onChange={(e) => setRemember(e.target.checked)}
                     className="w-4 h-4 text-primary border-border rounded focus:ring-primary cursor-pointer"
                   />
                   <span>Remember Me</span>

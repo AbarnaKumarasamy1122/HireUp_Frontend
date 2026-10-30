@@ -56,6 +56,26 @@ export const getAllCompanies = async () => {
   return api.get(`/api/users/all-companies/`);
 };
 
+export const getAdminDashboard = async () => {
+  return api.get("/api/users/admin-dashboard/");
+};
+
+export const getAdminNotifications = async () =>
+  api.get("/api/notifications/admin-notifications/");
+
+export const getAdminContactMessages = async () =>
+  api.get("/api/users/admin-contact-messages/");
+
+export const getPublicStatistics = async () => {
+  return api.get("/api/users/public-statistics/");
+};
+
+export const sendContactMessage = (data: {
+  name: string;
+  email: string;
+  message: string;
+}) => api.post("/api/users/contact/", data);
+
 // SEND OTP
 export const sendOTP = (email: string) => {
   return api.post("/api/users/send-otp/", {
@@ -86,6 +106,17 @@ export const resetPassword = (
 export const getCompanyProfile = (id: number) => {
   return api.get(`/api/users/${id}/company-profile/`);
 };
+
+export const updateCompanyProfile = (id: number, data: {
+  first_name: string;
+  last_name: string;
+  company_name: string;
+  company_address: string;
+  company_contact: string;
+  company_website: string;
+  company_description: string;
+  profile_image: string;
+}) => api.put(`/api/users/${id}/company-profile/`, data);
 
 // JOBS
 export const createJob = (data: any) => {
@@ -120,16 +151,18 @@ export const getCandidateProfile = (id: number) => {
   return api.get(`/api/users/${id}/candidate-profile/`);
 };
 
+export const updateCandidateProfile = (id: number, data: {
+  first_name: string;
+  last_name: string;
+  profile_image: string;
+}) => api.put(`/api/users/${id}/candidate-profile/`, data);
+
 // APPLICATIONS
 export const applyJob = (data: any) =>
   api.post("/api/applications/apply-job/", data);
 
 export const getMyApplications = () =>
   api.get("/api/applications/candidate-applications/");
-
-// INTERVIEWS
-export const getMyInterviews = () =>
-  api.get("/api/interviews/my-interviews/");
 
 // NOTIFICATIONS
 export const getMyNotifications = () =>
@@ -154,3 +187,77 @@ export const getSavedJobIds = () =>
 // RESUME UPDATE
 export const updateResume = (id: number, resume_url: string) =>
   api.put(`/api/users/update-resume/${id}/`, { resume_url });
+
+// SHORTLIST CANDIDATE
+export const shortlistCandidate = (
+  applicationId: number
+) =>
+  api.put(
+    `/api/applications/shortlist-candidate/${applicationId}/`
+  );
+
+
+// REJECT CANDIDATE
+export const rejectCandidate = (
+  applicationId: number
+) =>
+  api.put(
+    `/api/applications/reject-candidate/${applicationId}/`
+  );
+
+
+// ACCEPT CANDIDATE
+export const acceptCandidate = (
+  applicationId: number
+) =>
+  api.put(
+    `/api/applications/accept-candidate/${applicationId}/`
+  );
+
+// SCHEDULE INTERVIEW
+export const scheduleInterview = (
+  data: {
+    application_id: number;
+    scheduled_at: string;
+    meeting_link: string;
+  }
+) =>
+  api.post(
+    "/api/interviews/schedule-interview/",
+    data
+  );
+
+export const updateInterview = (
+  id: number,
+  data: {
+    scheduled_at: string;
+    meeting_link: string;
+  }
+) =>
+  api.put(
+    `/api/interviews/update-interview/${id}/`,
+    data
+  );
+
+
+// COMPANY INTERVIEWS
+export const getCompanyInterviews = () =>
+  api.get(
+    "/api/interviews/company-interviews/"
+  );
+
+
+// CANDIDATE INTERVIEWS
+export const getMyInterviews = () =>
+  api.get(
+    "/api/interviews/my-interviews/"
+  );
+
+
+// COMPLETE INTERVIEW
+export const completeInterview = (
+  id: number
+) =>
+  api.put(
+    `/api/interviews/complete-interview/${id}/`
+  );

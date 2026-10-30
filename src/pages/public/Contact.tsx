@@ -3,8 +3,47 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
+import { useState } from "react";
+import { sendContactMessage } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const Contact = () => {
+  const toast = useToast();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sending, setSending] = useState(false);
+
+  const submit = async () => {
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      toast.error("Please complete all fields");
+      return;
+    }
+    try {
+      setSending(true);
+      await sendContactMessage(form);
+      setForm({ name: "", email: "", message: "" });
+      toast.success("Your message has been sent successfully");
+    } catch (error: unknown) {
+      const response =
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+          ? (error as {
+              response?: {
+                data?: {
+                  error?: unknown;
+                };
+              };
+            }).response
+          : undefined;
+      toast.error(
+        typeof response?.data?.error === "string"
+          ? response.data.error
+          : "Unable to send your message",
+      );
+    } finally {
+      setSending(false);
+    }
+  };
   return (
     <div className="bg-background">
 
@@ -67,23 +106,29 @@ const Contact = () => {
             <input
               type="text"
               placeholder="Your Name"
+              value={form.name}
+              onChange={(event) => setForm({ ...form, name: event.target.value })}
               className="w-full border border-border rounded-xl px-4 py-3"
             />
 
             <input
               type="email"
               placeholder="Your Email"
+              value={form.email}
+              onChange={(event) => setForm({ ...form, email: event.target.value })}
               className="w-full border border-border rounded-xl px-4 py-3"
             />
 
             <textarea
               placeholder="Your Message"
               rows={5}
+              value={form.message}
+              onChange={(event) => setForm({ ...form, message: event.target.value })}
               className="w-full border border-border rounded-xl px-4 py-3"
             />
 
-            <button className="btn-primary w-full py-3 cursor-pointer">
-              Send Message
+            <button onClick={submit} disabled={sending} className="btn-primary w-full py-3 cursor-pointer disabled:opacity-50">
+              {sending ? "Sending..." : "Send Message"}
             </button>
 
           </div>

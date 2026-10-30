@@ -9,6 +9,7 @@ import {
     getCandidateProfile, getAppliedJobIds,
 } from "../../services/authService";
 import { useToast } from "../../components/Toast";
+import { getStoredValue } from "../../context/AuthContext";
 
 const SavedJobs = () => {
     const toast = useToast();
@@ -83,7 +84,7 @@ const SavedJobs = () => {
 
     const handleSubmitApplication = async () => {
         try {
-            const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+            const user = JSON.parse(getStoredValue("user") || "{}");
             const profile = await getCandidateProfile(user.id);
             if (!profile.data.resume_url) {
                 toast.error("Please upload your resume first");

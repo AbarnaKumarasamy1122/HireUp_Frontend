@@ -23,6 +23,7 @@ import Analytics from "../pages/company/Analytics";
 import ManageJobs from "../pages/company/ManageJobs";
 import PostJob from "../pages/company/PostJob";
 import CompanyApplicants from "../pages/company/CompanyApplicants";
+import CompanySettings from "../pages/company/CompanySettings";
 import CandidateLayout from "../pages/candidate/CandidateLayout";
 import CandidateDashboard from "../pages/candidate/CandidateDashboard";
 import CandidateProfile from "../pages/candidate/CandidateProfile";
@@ -80,6 +81,7 @@ const AppRoutes = () => {
           <Route path="manage-jobs" element={<ManageJobs />} />
           <Route path="applicants" element={<CompanyApplicants />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="settings" element={<CompanySettings />} />
         </Route>
 
 

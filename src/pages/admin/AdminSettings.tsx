@@ -8,10 +8,12 @@ import {
 
 import { imagekit } from "../../utils/imagekit";
 import { useToast } from "../../components/Toast";
+import { useAuth } from "../../context/AuthContext";
 
 const AdminSettings = () => {
 
   const toast = useToast();
+  const { setUser } = useAuth();
 
   const storedUser = JSON.parse(
     sessionStorage.getItem("user") ||
@@ -103,8 +105,10 @@ const AdminSettings = () => {
         profile_image: imageUrl,
       });
 
-      // update storage
-      sessionStorage.setItem("user", JSON.stringify(res.data.user));
+      const updatedUser = JSON.stringify(res.data.user);
+      localStorage.setItem("user", updatedUser);
+      sessionStorage.setItem("user", updatedUser);
+      setUser(res.data.user);
 
       toast.success("Profile updated successfully");
       setEditing(false);
@@ -191,7 +195,7 @@ const AdminSettings = () => {
           <input
             value={form.email}
             disabled
-            className="w-full border border-border p-3 rounded bg-gray-100 dark:bg-slate-800 cursor-not-allowed"
+            className="w-full border border-border p-3 rounded bg-gray-100 dark:bg-slate-200 cursor-not-allowed"
           />
         </div>
 

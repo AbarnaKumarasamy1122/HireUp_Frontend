@@ -7,6 +7,7 @@ import {
   BarChart3,
   LogOut,
   X,
+  Settings,
 } from "lucide-react";
 
 import logo from "/images/logo.png";
@@ -50,6 +51,11 @@ const CompanySidebar = ({
       path: `/company/${id}/analytics`,
       icon: <BarChart3 size={20} />,
     },
+    {
+      name: "Settings",
+      path: `/company/${id}/settings`,
+      icon: <Settings size={20} />,
+    },
   ];
 
   const handleNavClick = () => {
@@ -81,7 +87,7 @@ const CompanySidebar = ({
         {/* Mobile Close Button */}
         <button
           onClick={onClose}
-          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+          className="lg:hidden absolute top-3 right-3 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-200 cursor-pointer"
         >
           <X size={20} />
         </button>
@@ -116,7 +122,7 @@ const CompanySidebar = ({
                 `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
                   isActive
                     ? "bg-primary text-white shadow"
-                    : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                    : "hover:bg-slate-100 dark:hover:bg-slate-200"
                 }`
               }
             >

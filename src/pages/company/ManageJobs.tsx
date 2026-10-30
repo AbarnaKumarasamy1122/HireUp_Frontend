@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 import { useToast } from "../../components/Toast";
+import { getStoredValue } from "../../context/AuthContext";
 
 const emptyJob = {
   title: "",
@@ -31,7 +32,7 @@ const emptyJob = {
 
 const ManageJobs = () => {
   const toast = useToast();
-  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+  const user = JSON.parse(getStoredValue("user") || "{}");
 
   const [jobs, setJobs] = useState<any[]>([]);
   const [selectedJob, setSelectedJob] = useState<any>(null);

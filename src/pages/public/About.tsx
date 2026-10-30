@@ -5,13 +5,9 @@ import {
   TrendingUp,
   ShieldCheck,
 } from "lucide-react";
-
-const stats = [
-  { label: "Active Users", value: "85K+" },
-  { label: "Companies", value: "3.5K+" },
-  { label: "Jobs Posted", value: "12K+" },
-  { label: "Successful Hires", value: "24K+" },
-];
+import { useEffect, useState } from "react";
+import { getPublicStatistics } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const values = [
   {
@@ -37,6 +33,28 @@ const values = [
 ];
 
 const About = () => {
+  const toast = useToast();
+  const [stats, setStats] = useState([
+    { label: "Candidates", value: "..." },
+    { label: "Companies", value: "..." },
+    { label: "Active Jobs", value: "..." },
+    { label: "Successful Hires", value: "..." },
+  ]);
+
+  useEffect(() => {
+    getPublicStatistics()
+      .then(({ data }) => {
+        const format = (value: number) => value.toLocaleString();
+        setStats([
+          { label: "Candidates", value: format(data.candidates) },
+          { label: "Companies", value: format(data.companies) },
+          { label: "Active Jobs", value: format(data.active_jobs) },
+          { label: "Successful Hires", value: format(data.hires) },
+        ]);
+      })
+      .catch(() => toast.error("Unable to load platform statistics"));
+  }, []);
+
   return (
     <div className="bg-background">
       {/* HERO */}

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 import {
   Search,
@@ -17,13 +18,8 @@ import {
 import {
   MdLocationOn,
 } from "react-icons/md";
-
-const stats = [
-  { label: "Active Jobs", value: "12k+", icon: Briefcase },
-  { label: "Companies", value: "3.5k+", icon: Building2 },
-  { label: "Candidates", value: "85k+", icon: Users },
-  { label: "Hires Made", value: "24k+", icon: TrendingUp },
-];
+import { getPublicStatistics } from "../../services/authService";
+import { useToast } from "../../components/Toast";
 
 const features = [
   {
@@ -58,16 +54,38 @@ const features = [
   },
 ];
 
-const categories = [
-  { name: "Engineering", count: 2840 },
-  { name: "Design", count: 1120 },
-  { name: "Marketing", count: 980 },
-  { name: "Data & AI", count: 1540 },
-  { name: "Remote", count: 4210 },
-];
-
 const Home = () => {
   const navigate = useNavigate();
+  const toast = useToast();
+  const [statistics, setStatistics] = useState({
+    active_jobs: 0,
+    companies: 0,
+    candidates: 0,
+    hires: 0,
+    jobs_by_location_type: { remote: 0, onsite: 0, hybrid: 0 },
+  });
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  useEffect(() => {
+    getPublicStatistics()
+      .then(({ data }) => setStatistics(data))
+      .catch(() => toast.error("Unable to load platform statistics"))
+      .finally(() => setStatsLoading(false));
+  }, []);
+
+  const formatCount = (value: number) =>
+    statsLoading ? "..." : value.toLocaleString();
+  const stats = [
+    { label: "Active Jobs", value: formatCount(statistics.active_jobs), icon: Briefcase },
+    { label: "Companies", value: formatCount(statistics.companies), icon: Building2 },
+    { label: "Candidates", value: formatCount(statistics.candidates), icon: Users },
+    { label: "Hires Made", value: formatCount(statistics.hires), icon: TrendingUp },
+  ];
+  const categories = [
+    { name: "Remote", count: statistics.jobs_by_location_type.remote },
+    { name: "Onsite", count: statistics.jobs_by_location_type.onsite },
+    { name: "Hybrid", count: statistics.jobs_by_location_type.hybrid },
+  ];
 
   return (
     <div className="bg-background">
@@ -182,7 +200,7 @@ const Home = () => {
           {categories.map((c, i) => (
             <div
               key={c.name}
-              className="card p-4 flex justify-between items-center hover:border-primary hover:bg-slate-50 dark:hover:bg-slate-800 transition fade-up cursor-pointer"
+              className="card p-4 flex justify-between items-center hover:border-primary hover:bg-slate-50 dark:hover:bg-slate-200 transition fade-up cursor-pointer"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div>

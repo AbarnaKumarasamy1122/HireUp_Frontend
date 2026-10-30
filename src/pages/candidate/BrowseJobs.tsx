@@ -9,6 +9,7 @@ import {
   getAppliedJobIds, getSavedJobIds, getCandidateProfile,
 } from "../../services/authService";
 import { useToast } from "../../components/Toast";
+import { getStoredValue } from "../../context/AuthContext";
 
 const BrowseJobs = () => {
   const toast = useToast();
@@ -97,7 +98,7 @@ const BrowseJobs = () => {
 
   const handleSubmitApplication = async () => {
     try {
-      const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+      const user = JSON.parse(getStoredValue("user") || "{}");
       const profile = await getCandidateProfile(user.id);
       if (!profile.data.resume_url) {
         toast.error("Please upload your resume before applying.");
@@ -281,7 +282,7 @@ const BrowseJobs = () => {
                       className={`py-2 rounded-xl border border-primary transition cursor-pointer ${
                         isSaved
                           ? "bg-blue-50 text-blue-600 border-blue-200 cursor-not-allowed"
-                          : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                          : "hover:bg-slate-100 dark:hover:bg-slate-200"
                       }`}
                     >
                       <span className="flex items-center justify-center gap-2">

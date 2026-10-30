@@ -17,7 +17,7 @@ const AdminLayout = () => {
         <div className="lg:hidden sticky top-0 z-30 flex items-center gap-3 border-b border-border bg-background px-4 py-3">
           <button
             onClick={() => setOpen(true)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-200 cursor-pointer"
             aria-label="Open menu"
           >
             <Menu size={22} />

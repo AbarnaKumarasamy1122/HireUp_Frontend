@@ -4,6 +4,7 @@ import { registerUser } from "../../services/authService";
 import { imagekit } from "../../utils/imagekit";
 import axios from "axios";
 import { useToast } from "../../components/Toast";
+import { Eye, EyeOff } from "lucide-react";
 
 const Signup = () => {
 
@@ -12,6 +13,7 @@ const Signup = () => {
   const navigate = useNavigate();
 
   const [tab, setTab] = useState<"candidate" | "company">("candidate");
+  const [showPassword, setShowPassword] = useState(false);
 
   const [document, setDocument] = useState<any>(null);
 
@@ -220,7 +222,7 @@ const Signup = () => {
                 <button
                   className={`flex-1 py-3 font-medium transition cursor-pointer ${tab === "candidate"
                     ? "bg-primary text-white"
-                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
+                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-200"
                     }`}
                   onClick={() => setTab("candidate")}
                 >
@@ -230,7 +232,7 @@ const Signup = () => {
                 <button
                   className={`flex-1 py-3 font-medium transition cursor-pointer ${tab === "company"
                     ? "bg-primary text-white"
-                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-800"
+                    : "bg-background hover:bg-slate-100 dark:hover:bg-slate-200"
                     }`}
                   onClick={() => setTab("company")}
                 >
@@ -269,14 +271,24 @@ const Signup = () => {
                     }
                   />
 
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full border border-border rounded-xl px-4 py-3"
-                    onChange={(e) =>
-                      setForm({ ...form, password: e.target.value })
-                    }
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      className="w-full border border-border rounded-xl px-4 py-3 pr-12"
+                      onChange={(e) =>
+                        setForm({ ...form, password: e.target.value })
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-muted hover:text-primary cursor-pointer"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                    </button>
+                  </div>
 
                 </div>
               ) : (
@@ -357,14 +369,24 @@ const Signup = () => {
                     }
                   />
 
-                  <input
-                    type="password"
-                    placeholder="Password"
-                    className="w-full border border-border rounded-xl px-4 py-3"
-                    onChange={(e) =>
-                      setForm({ ...form, password: e.target.value })
-                    }
-                  />
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      className="w-full border border-border rounded-xl px-4 py-3 pr-12"
+                      onChange={(e) =>
+                        setForm({ ...form, password: e.target.value })
+                      }
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((visible) => !visible)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 rounded-lg p-1 text-muted hover:text-primary cursor-pointer"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={19} /> : <Eye size={19} />}
+                    </button>
+                  </div>
 
                 </div>
               )}

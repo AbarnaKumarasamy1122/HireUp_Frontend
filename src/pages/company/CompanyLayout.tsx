@@ -23,7 +23,7 @@ const CompanyLayout = () => {
 
           <button
             onClick={() => setOpen(true)}
-            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-200 cursor-pointer"
           >
             <Menu size={22} />
           </button>
@@ -35,7 +35,7 @@ const CompanyLayout = () => {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 p-4 md:p-8 overflow-y-auto bg-slate-50 dark:bg-slate-900">
+        <main className="flex-1 p-4 md:p-8 overflow-y-auto bg-slate-50 dark:bg-slate-100">
           <Outlet />
         </main>
 

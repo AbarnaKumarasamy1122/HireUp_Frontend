@@ -115,7 +115,7 @@ const CandidateSidebar = ({
                 ${
                   isActive
                     ? "bg-primary text-white"
-                    : "hover:bg-slate-100 dark:hover:bg-slate-800"
+                    : "hover:bg-slate-100 dark:hover:bg-slate-200"
                 }`
               }
             >
